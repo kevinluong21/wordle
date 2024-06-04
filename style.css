@@ -22,11 +22,12 @@ body {
 
 .tile {
     aspect-ratio: 1/1;
-    background-color: #d6d6d6;
+    background-color: white;
     border-radius: 5%;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px grey solid;
 }
 
 .tile h1 {

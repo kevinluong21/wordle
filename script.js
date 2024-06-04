@@ -56,6 +56,7 @@ var Game = (function() {
 
     function checkLetters(inputArray, currentArray, correctPositions) {
         let correctLetters = [];
+        let incorrectLetters = [];
         //set all the letters we know are correct to null
         for (let i = 0; i < correctPositions.length; i++) {
             currentArray[correctPositions[i]] = null;
@@ -63,16 +64,27 @@ var Game = (function() {
 
         //check if the letter is in the list. if it is, set the letter to null in current so that we don't double count.
         for (let i = 0; i < inputArray.length; i++) {
-            for (let j = 0; j < currentArray.length; j++) {
-                console.log(inputArray[i]);
-                if (inputArray[i] == currentArray[j]) {
+            let j = 0;
+            while (j < currentArray.length) {
+                if (j == currentArray.length - 1 && inputArray[i] != currentArray[j]) {
+                    incorrectLetters.push(i);
+                }
+                else if (inputArray[i] == currentArray[j]) {
                     correctLetters.push(i);
                     currentArray[j] = null;
+                    break;
                 }
+                j++;
             }
-        }
+            // for (let j = 0; j < currentArray.length; j++) {
+            //     if (inputArray[i] == currentArray[j]) {
+            //         correctLetters.push(i);
+            //         currentArray[j] = null;
+            //     }
+            // }
+        }   
 
-        return correctLetters;
+        return [correctLetters, incorrectLetters];
     }
 
     game.checkWord = function(input) {
@@ -101,11 +113,15 @@ var Game = (function() {
         let current = game.currentWord.split("");
         let correctPositions = []; //correct letter and position (marked as green)
         let correctLetters = []; //letter is in word but wrong position (marked as yellow)
+        let incorrectLetters = []; //letter is not in word (marked as grey)
 
         correctPositions = checkPositions(inputArray, current);
-        correctLetters = checkLetters(inputArray, current, correctPositions)
 
-        return [correctPositions, correctLetters];
+        let temp = checkLetters(inputArray, current, correctPositions);
+        correctLetters = temp[0];
+        incorrectLetters = temp[1];
+
+        return [correctPositions, correctLetters, incorrectLetters];
     }
 
     return game;
@@ -152,19 +168,28 @@ window.addEventListener("keydown", (event) => {
         if (result == true) {
             for (let i = 0; i < 5; i++) {
                 tiles[(attempts * 5) + i].style.backgroundColor = "#40c74b";
+                inputLetter[(attempts * 5) + i].style.color = "white";
             }
         }
         //a list of correct positions and letters was returned
-        if (result.length == 2) {
+        if (result.length == 3) {
             let correctPositions = result[0];
             let correctLetters = result[1];
+            let incorrectLetters = result[2];
 
             for (let i = 0; i < correctPositions.length; i++) {
                 tiles[(attempts * 5) + correctPositions[i]].style.backgroundColor = "#40c74b";
+                inputLetter[(attempts * 5) + correctPositions[i]].style.color = "white";
             }
 
             for (let i = 0; i < correctLetters.length; i++) {
-                tiles[(attempts * 5) + correctLetters[i]].style.backgroundColor = "#fff652";
+                tiles[(attempts * 5) + correctLetters[i]].style.backgroundColor = "#dee607";
+                inputLetter[(attempts * 5) + correctLetters[i]].style.color = "white";
+            }
+
+            for (let i = 0; i < incorrectLetters.length; i++) {
+                tiles[(attempts * 5) + incorrectLetters[i]].style.backgroundColor = "grey";
+                inputLetter[(attempts * 5) + incorrectLetters[i]].style.color = "white";
             }
         }
 
