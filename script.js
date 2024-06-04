@@ -135,11 +135,14 @@ var letter = 0; //the letter that the user is entering
 var tiles = document.getElementsByClassName("tile");
 var inputLetter = document.getElementsByClassName("input-letter");
 
+
 window.addEventListener("keydown", (event) => {
     //for a single character that is pressed down, check that it is a letter (lowercase or uppercase)
     const pattern = /[a-zA-Z]/;
     if (event.key.length == 1 && pattern.test(event.key)) {
         if (guess.length < 5 && attempts < 6) {
+            tiles[(attempts * 5) + letter].style.border = "2px #a3a3a3 solid";
+            tiles[(attempts * 5) + letter].classList.add("popout");
             inputLetter[(attempts * 5) + letter].innerHTML = event.key.toUpperCase();
             guess.push(event.key.toUpperCase());
             letter++;
@@ -149,18 +152,15 @@ window.addEventListener("keydown", (event) => {
     else if (event.key == "Backspace") {
         if (guess.length > 0) {
             letter--;
+            tiles[(attempts * 5) + letter].style.border = "1px #d1d1d1 solid";
+            tiles[(attempts * 5) + letter].classList.remove("popout");
             inputLetter[(attempts * 5) + letter].innerHTML = "";
             guess.pop();
         }
-
-        console.log(guess);
-        console.log("'Backspace' was pressed.");
     }
     //if the key pressed was enter and the user entered 5 letters, submit the guess
     else if (event.key == "Enter" && guess.length == 5) {
-        console.log("'Enter' was pressed.");
         let result = game.checkWord(guess.join(""));
-        console.log(result);
 
         //guessed word is correct (game ends)
         if (result == true) {

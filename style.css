@@ -18,16 +18,18 @@ body {
 
 .tiles td {
     width: 20%;
+    /* padding: 1%; */
 }
 
 .tile {
+    margin: 2.5%;
     aspect-ratio: 1/1;
     background-color: white;
     border-radius: 5%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px grey solid;
+    border: 1px #d1d1d1 solid;
 }
 
 .tile h1 {
@@ -36,4 +38,19 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: black;
     text-transform: uppercase;
+}
+
+.popout {
+    animation: popout 0.25s ease;
+    -webkit-animation: popout 0.25s ease;
+}
+@keyframes popout {
+    from{margin: 2.5%}
+    50%{margin: 0%}
+    to{margin: 2.5%}
+}
+@-webkit-keyframes popout {
+    from{margin: 2.5%}
+    50%{margin: 0%}
+    to{margin: 2.5%}
 }
