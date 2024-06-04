@@ -7,7 +7,7 @@ var Game = (function() {
     game.guesses = []; //list of all user's guesses
     game.wordLength = 5; //set the length of the word to guess
 
-    game.startGame() = function() {
+    game.startGame = function() {
         //if the current score is higher than the high score, set high score to this score
         if (game.score > game.highScore) {
             game.highScore = game.score;
@@ -19,7 +19,7 @@ var Game = (function() {
             var currentWord = game.wordInventory[Math.floor(Math.random() * game.wordInventory.length)];
         } while (currentWord == game.currentWord);
 
-        game.currentWord = currentWord;
+        game.currentWord = currentWord.toUpperCase();
     }
 
     //check that the length of the input is exactly 5
@@ -42,25 +42,44 @@ var Game = (function() {
 
     }
 
-    function checkPositions(inputArray, currentArray, correctPosition) {
+    function checkPositions(inputArray, currentArray) {
         let i = 0
+        let correctPositions = [];
         while (i < game.wordLength) {
             if (inputArray[i] == currentArray[i]) {
-                correctPosition.push(i);
+                correctPositions.push(i);
             }
             i++;
         }
-        return correctPosition;
+        return correctPositions;
     }
 
-    function checkLetters() {
-        
+    function checkLetters(inputArray, currentArray, correctPositions) {
+        let correctLetters = [];
+        //set all the letters we know are correct to null
+        for (let i = 0; i < correctPositions.length; i++) {
+            currentArray[correctPositions[i]] = null;
+        }
+
+        for (let i = 0; i < inputArray.length; i++) {
+            index = currentArray.findIndex(function(value, index, array) {
+                return value == inputArray[i];
+            });
+            
+            if (index > 0) {
+                correctLetters.push(index);
+                currentArray[index] = null;
+            }
+        }
+
+        return correctLetters;
     }
 
-    game.checkWord(input) = function() {
+    game.checkWord = function(input) {
+        input = input.toUpperCase();
         //if the input fails any of the checks, then the input is invalid
         if (!checkLength(input)) {
-            return "Input is too long";
+            return "Input must be 5 characters";
         }
         else if (!isAlpha(input)) {
             return "Input can only contain letters";
@@ -80,9 +99,14 @@ var Game = (function() {
         //split the strings into letters
         let inputArray = input.split("");
         let current = game.currentWord.split("");
-        let correctPosition = {}; //correct letter and position (marked as green)
-        let correctLetter = {}; //letter is in word but wrong position (marked as yellow)
+        let correctPositions = []; //correct letter and position (marked as green)
+        let correctLetters = []; //letter is in word but wrong position (marked as yellow)
 
+        correctPositions = checkPositions(inputArray, current);
+        correctLetters = checkLetters(inputArray, current, correctPositions)
 
+        return {"positions": correctPositions, "letters": correctLetters};
     }
+
+    return game;
 });
