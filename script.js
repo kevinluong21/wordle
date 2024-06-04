@@ -151,7 +151,7 @@ window.addEventListener("keydown", (event) => {
         //guessed word is correct (game ends)
         if (result == true) {
             for (let i = 0; i < 5; i++) {
-                tiles[(attempts * 5) + i].style.backgroundColor = "green";
+                tiles[(attempts * 5) + i].style.backgroundColor = "#40c74b";
             }
         }
         //a list of correct positions and letters was returned
@@ -160,11 +160,11 @@ window.addEventListener("keydown", (event) => {
             let correctLetters = result[1];
 
             for (let i = 0; i < correctPositions.length; i++) {
-                tiles[(attempts * 5) + correctPositions[i]].style.backgroundColor = "green";
+                tiles[(attempts * 5) + correctPositions[i]].style.backgroundColor = "#40c74b";
             }
 
             for (let i = 0; i < correctLetters.length; i++) {
-                tiles[(attempts * 5) + correctLetters[i]].style.backgroundColor = "yellow";
+                tiles[(attempts * 5) + correctLetters[i]].style.backgroundColor = "#fff652";
             }
         }
 
