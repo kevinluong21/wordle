@@ -60,29 +60,27 @@ var Game = (function() {
         //set all the letters we know are correct to null
         for (let i = 0; i < correctPositions.length; i++) {
             currentArray[correctPositions[i]] = null;
+            inputArray[correctPositions[i]] = null;
         }
 
         //check if the letter is in the list. if it is, set the letter to null in current so that we don't double count.
         for (let i = 0; i < inputArray.length; i++) {
             let j = 0;
             while (j < currentArray.length) {
-                if (j == currentArray.length - 1 && inputArray[i] != currentArray[j]) {
+                //if no non-null match and about to reach end of array, then this letter from inputArray is nowhere to be found in currentArray
+                //therefore, it is incorrect
+                if (j == currentArray.length - 1 && inputArray[i] != currentArray[j] && inputArray[i] != null) {
                     incorrectLetters.push(i);
                 }
-                else if (inputArray[i] == currentArray[j]) {
+                //if there is a non-null match, then this letter is in the word, but in the wrong position
+                else if (inputArray[i] == currentArray[j] && inputArray[i] != null) {
                     correctLetters.push(i);
                     currentArray[j] = null;
                     break;
                 }
                 j++;
             }
-            // for (let j = 0; j < currentArray.length; j++) {
-            //     if (inputArray[i] == currentArray[j]) {
-            //         correctLetters.push(i);
-            //         currentArray[j] = null;
-            //     }
-            // }
-        }   
+        }
 
         return [correctLetters, incorrectLetters];
     }
@@ -177,11 +175,6 @@ window.addEventListener("keydown", (event) => {
             let correctLetters = result[1];
             let incorrectLetters = result[2];
 
-            for (let i = 0; i < correctPositions.length; i++) {
-                tiles[(attempts * 5) + correctPositions[i]].style.backgroundColor = "#40c74b";
-                inputLetter[(attempts * 5) + correctPositions[i]].style.color = "white";
-            }
-
             for (let i = 0; i < correctLetters.length; i++) {
                 tiles[(attempts * 5) + correctLetters[i]].style.backgroundColor = "#dee607";
                 inputLetter[(attempts * 5) + correctLetters[i]].style.color = "white";
@@ -190,6 +183,11 @@ window.addEventListener("keydown", (event) => {
             for (let i = 0; i < incorrectLetters.length; i++) {
                 tiles[(attempts * 5) + incorrectLetters[i]].style.backgroundColor = "grey";
                 inputLetter[(attempts * 5) + incorrectLetters[i]].style.color = "white";
+            }
+
+            for (let i = 0; i < correctPositions.length; i++) {
+                tiles[(attempts * 5) + correctPositions[i]].style.backgroundColor = "#40c74b";
+                inputLetter[(attempts * 5) + correctPositions[i]].style.color = "white";
             }
         }
 
