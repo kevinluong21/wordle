@@ -132,9 +132,23 @@ game.startGame();
 var guess = [];
 var attempts = 0; //the row/word that the user is currently on
 var letter = 0; //the letter that the user is entering
+var table = document.getElementsByClassName("tiles")[0];
+var tableCells;
 var tiles = document.getElementsByClassName("tile");
-var inputLetter = document.getElementsByClassName("input-letter");
+var tileFronts = document.getElementsByClassName("tile-front");
+var tileBacks = document.getElementsByClassName("tile-back");
+var inputLetters = [];
+var displayLetters = [];
 
+tableCells = table.querySelectorAll("td");
+
+for (let i = 0; i < tileFronts.length; i++) {
+    inputLetters.push(tileFronts[i].children[0]);
+}
+
+for (let i = 0; i < tileBacks.length; i++) {
+    displayLetters.push(tileBacks[i].children[0]);
+}
 
 window.addEventListener("keydown", (event) => {
     //for a single character that is pressed down, check that it is a letter (lowercase or uppercase)
@@ -142,8 +156,9 @@ window.addEventListener("keydown", (event) => {
     if (event.key.length == 1 && pattern.test(event.key)) {
         if (guess.length < 5 && attempts < 6) {
             tiles[(attempts * 5) + letter].style.border = "2px #a3a3a3 solid";
-            tiles[(attempts * 5) + letter].classList.add("popout");
-            inputLetter[(attempts * 5) + letter].innerHTML = event.key.toUpperCase();
+            tableCells[(attempts * 5) + letter].classList.add("popout");
+            inputLetters[(attempts * 5) + letter].innerHTML = event.key.toUpperCase();
+            displayLetters[(attempts * 5) + letter].innerHTML = event.key.toUpperCase();
             guess.push(event.key.toUpperCase());
             letter++;
         }
@@ -153,8 +168,9 @@ window.addEventListener("keydown", (event) => {
         if (guess.length > 0) {
             letter--;
             tiles[(attempts * 5) + letter].style.border = "1px #d1d1d1 solid";
-            tiles[(attempts * 5) + letter].classList.remove("popout");
-            inputLetter[(attempts * 5) + letter].innerHTML = "";
+            tableCells[(attempts * 5) + letter].classList.remove("popout");
+            inputLetters[(attempts * 5) + letter].innerHTML = "";
+            displayLetters[(attempts * 5) + letter].innerHTML = "";
             guess.pop();
         }
     }
@@ -166,7 +182,7 @@ window.addEventListener("keydown", (event) => {
         if (result == true) {
             for (let i = 0; i < 5; i++) {
                 tiles[(attempts * 5) + i].style.backgroundColor = "#40c74b";
-                inputLetter[(attempts * 5) + i].style.color = "white";
+                inputLetters[(attempts * 5) + i].style.color = "white";
             }
         }
         //a list of correct positions and letters was returned
@@ -177,17 +193,17 @@ window.addEventListener("keydown", (event) => {
 
             for (let i = 0; i < correctLetters.length; i++) {
                 tiles[(attempts * 5) + correctLetters[i]].style.backgroundColor = "#dee607";
-                inputLetter[(attempts * 5) + correctLetters[i]].style.color = "white";
+                inputLetters[(attempts * 5) + correctLetters[i]].style.color = "white";
             }
 
             for (let i = 0; i < incorrectLetters.length; i++) {
                 tiles[(attempts * 5) + incorrectLetters[i]].style.backgroundColor = "grey";
-                inputLetter[(attempts * 5) + incorrectLetters[i]].style.color = "white";
+                inputLetters[(attempts * 5) + incorrectLetters[i]].style.color = "white";
             }
 
             for (let i = 0; i < correctPositions.length; i++) {
                 tiles[(attempts * 5) + correctPositions[i]].style.backgroundColor = "#40c74b";
-                inputLetter[(attempts * 5) + correctPositions[i]].style.color = "white";
+                inputLetters[(attempts * 5) + correctPositions[i]].style.color = "white";
             }
         }
 
