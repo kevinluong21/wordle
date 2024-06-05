@@ -133,14 +133,12 @@ var guess = [];
 var attempts = 0; //the row/word that the user is currently on
 var letter = 0; //the letter that the user is entering
 var table = document.getElementsByClassName("tiles")[0];
-var tableCells;
+var tableCells = table.querySelectorAll("td");;
 var tiles = document.getElementsByClassName("tile");
 var tileFronts = document.getElementsByClassName("tile-front");
 var tileBacks = document.getElementsByClassName("tile-back");
 var inputLetters = [];
 var displayLetters = [];
-
-tableCells = table.querySelectorAll("td");
 
 for (let i = 0; i < tileFronts.length; i++) {
     inputLetters.push(tileFronts[i].children[0]);
@@ -181,8 +179,15 @@ window.addEventListener("keydown", (event) => {
         //guessed word is correct (game ends)
         if (result == true) {
             for (let i = 0; i < 5; i++) {
-                tiles[(attempts * 5) + i].style.backgroundColor = "#40c74b";
-                inputLetters[(attempts * 5) + i].style.color = "white";
+                (function(i) {
+                    var tileToAnimate = tiles[(attempts * 5) + i];
+                    setTimeout(function() {
+                        tileToAnimate.classList.add("correct-letter");
+                    }, i * 500);
+                })(i);
+                
+                tileBacks[(attempts * 5) + i].style.backgroundColor = "#40c74b";
+                displayLetters[(attempts * 5) + i].style.color = "white";
             }
         }
         //a list of correct positions and letters was returned
