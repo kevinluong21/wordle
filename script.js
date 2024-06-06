@@ -182,7 +182,7 @@ window.addEventListener("keydown", (event) => {
                 (function(i) {
                     var tileToAnimate = tiles[(attempts * 5) + i];
                     setTimeout(function() {
-                        tileToAnimate.classList.add("correct-letter");
+                        tileToAnimate.classList.add("reveal-letter");
                     }, i * 500);
                 })(i);
                 
@@ -196,20 +196,46 @@ window.addEventListener("keydown", (event) => {
             let correctLetters = result[1];
             let incorrectLetters = result[2];
 
+            var colours = new Array(5);
+
             for (let i = 0; i < correctLetters.length; i++) {
-                tiles[(attempts * 5) + correctLetters[i]].style.backgroundColor = "#dee607";
-                inputLetters[(attempts * 5) + correctLetters[i]].style.color = "white";
+                colours[correctLetters[i]] = "#dee607";
             }
 
             for (let i = 0; i < incorrectLetters.length; i++) {
-                tiles[(attempts * 5) + incorrectLetters[i]].style.backgroundColor = "grey";
-                inputLetters[(attempts * 5) + incorrectLetters[i]].style.color = "white";
+                colours[incorrectLetters[i]] = "grey";
             }
 
             for (let i = 0; i < correctPositions.length; i++) {
-                tiles[(attempts * 5) + correctPositions[i]].style.backgroundColor = "#40c74b";
-                inputLetters[(attempts * 5) + correctPositions[i]].style.color = "white";
+                colours[correctPositions[i]] = "#40c74b";
             }
+
+            for (let i = 0; i < colours.length; i++) {
+                (function(i) {
+                    var tileToAnimate = tiles[(attempts * 5) + i];
+                    setTimeout(function() {
+                        tileToAnimate.classList.add("reveal-letter");
+                    }, i * 500);
+                })(i);
+
+                tileBacks[(attempts * 5) + i].style.backgroundColor = colours[i];
+                displayLetters[(attempts * 5) + i].style.color = "white";
+            }
+
+            // for (let i = 0; i < correctLetters.length; i++) {
+            //     tiles[(attempts * 5) + correctLetters[i]].style.backgroundColor = "#dee607";
+            //     inputLetters[(attempts * 5) + correctLetters[i]].style.color = "white";
+            // }
+
+            // for (let i = 0; i < incorrectLetters.length; i++) {
+            //     tiles[(attempts * 5) + incorrectLetters[i]].style.backgroundColor = "grey";
+            //     inputLetters[(attempts * 5) + incorrectLetters[i]].style.color = "white";
+            // }
+
+            // for (let i = 0; i < correctPositions.length; i++) {
+            //     tiles[(attempts * 5) + correctPositions[i]].style.backgroundColor = "#40c74b";
+            //     inputLetters[(attempts * 5) + correctPositions[i]].style.color = "white";
+            // }
         }
 
         if (attempts < 6) {

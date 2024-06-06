@@ -74,11 +74,11 @@ body {
     to{padding: 1%}
 }
 
-.correct-letter {
-    animation: correct-letter 1s ease forwards;
-    -webkit-animation: correct-letter 1s ease forwards;
+.reveal-letter {
+    animation: reveal-letter 1s ease forwards;
+    -webkit-animation: reveal-letter 1s ease forwards;
 }
-@keyframes correct-letter {
+@keyframes reveal-letter {
     from{
         transform: rotateX(0deg);
     }
@@ -86,7 +86,7 @@ body {
         transform: rotateX(180deg);
     }
 }
-@-webkit-keyframes correct-letter {
+@-webkit-keyframes reveal-letter {
     from{
         -webkit-transform: rotateX(0deg);
     }
