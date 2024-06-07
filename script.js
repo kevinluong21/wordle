@@ -8,13 +8,19 @@ var Game = (function() {
     game.wordLength = 5; //set the length of the word to guess
     game.dictionary; //the list of words to check whether the word exists
 
-    game.start = function(dictionary) {
+    game.start = function() {
         //set a new word to play
         var currentWord = game.wordInventory[Math.floor(Math.random() * game.wordInventory.length)];
         game.currentWord = currentWord.toUpperCase();
-
-        game.dictionary = dictionary;
     }
+
+    // game.start = function(dictionary) {
+    //     //set a new word to play
+    //     var currentWord = game.wordInventory[Math.floor(Math.random() * game.wordInventory.length)];
+    //     game.currentWord = currentWord.toUpperCase();
+
+    //     game.dictionary = dictionary;
+    // }
 
     game.getCurrentWord = function() {
         return game.currentWord;
@@ -103,9 +109,9 @@ var Game = (function() {
         else if (!isAlpha(input)) {
             return "Input can only contain letters";
         }
-        else if (!isWord(input)) {
-            return "Not a word";
-        }
+        // else if (!isWord(input)) {
+        //     return "Not a word";
+        // }
 
         //add guess to list
         addGuess(input);
@@ -136,27 +142,28 @@ var Game = (function() {
 });
 
 //fetch the list of words from dictionary.txt
-async function openFile(path) {
-    try {
-        var data = await fetch(path);
-        var words = await data.text();
-        var dictionary = words.split("\n");
-        dictionary = dictionary.map(word => word.toUpperCase());
-        return dictionary;
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
+// async function openFile(path) {
+//     try {
+//         var data = await fetch(path);
+//         var words = await data.text();
+//         var dictionary = words.split("\n");
+//         dictionary = dictionary.map(word => word.toUpperCase());
+//         return dictionary;
+//     }
+//     catch (error) {
+//         console.log(error);
+//     }
+// }
 
 var games = []; //stores a list of Game modules that were played
 
 //since the fetching of a file is an async process and it needs to be fully loaded before the game starts,
 //wrap the entire game in an async function so that it can wait for the dictionary to be fully loaded before starting
 async function startGame() {
-    var dictionary = await openFile("dictionary.txt");
+    // var dictionary = await openFile("dictionary.txt");
     var game = Game();
-    game.start(dictionary);
+    // game.start(dictionary);
+    game.start();
 
     var guess = [];
     var attempts = 1; //the row/word that the user is currently on
