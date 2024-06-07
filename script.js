@@ -25,6 +25,10 @@ var Game = (function() {
         game.dictionary = dictionary;
     }
 
+    game.getCurrentWord = function() {
+        return game.currentWord;
+    }
+
     //check that the length of the input is exactly 5
     function checkLength(input) {
         if (input.length != game.wordLength) {
@@ -91,6 +95,10 @@ var Game = (function() {
         return [correctLetters, incorrectLetters];
     }
 
+    function addGuess(guess) {
+        game.guesses.push(guess);
+    }
+
     game.checkWord = function(input) {
         input = input.toUpperCase();
         //if the input fails any of the checks, then the input is invalid
@@ -103,8 +111,9 @@ var Game = (function() {
         else if (!isWord(input)) {
             return "Not a word";
         }
+
         //add guess to list
-        game.guesses.push(input);
+        addGuess(input);
         
         //return true if the words are exactly the same
         if (input == game.currentWord) {
@@ -145,16 +154,17 @@ async function openFile(path) {
     }
 }
 
+var games = []; //stores a list of Game modules that were played
+
 //since the fetching of a file is an async process and it needs to be fully loaded before the game starts,
 //wrap the entire game in an async function so that it can wait for the dictionary to be fully loaded before starting
 async function startGame() {
     var dictionary = await openFile("dictionary.txt");
-    var games = []; //stores a list of Game modules that were played
     var game = Game();
     game.start(dictionary);
 
     var guess = [];
-    var attempts = 0; //the row/word that the user is currently on
+    var attempts = 1; //the row/word that the user is currently on
     var letter = 0; //the letter that the user is entering
     var dialog = document.getElementsByClassName("dialog")[0];
     var message = document.getElementsByClassName("message")[0];
@@ -178,11 +188,11 @@ async function startGame() {
         //for a single character that is pressed down, check that it is a letter (lowercase or uppercase)
         const pattern = /[a-zA-Z]/;
         if (event.key.length == 1 && pattern.test(event.key)) {
-            if (guess.length < 5 && attempts < 6) {
-                tiles[(attempts * 5) + letter].style.border = "2px #a3a3a3 solid";
-                tableCells[(attempts * 5) + letter].classList.add("popout");
-                inputLetters[(attempts * 5) + letter].innerHTML = event.key.toUpperCase();
-                displayLetters[(attempts * 5) + letter].innerHTML = event.key.toUpperCase();
+            if (guess.length < 5 && attempts <= 6) {
+                tiles[((attempts - 1) * 5) + letter].style.border = "2px #a3a3a3 solid";
+                tableCells[((attempts - 1) * 5) + letter].classList.add("popout");
+                inputLetters[((attempts - 1) * 5) + letter].innerHTML = event.key.toUpperCase();
+                displayLetters[((attempts - 1) * 5) + letter].innerHTML = event.key.toUpperCase();
                 guess.push(event.key.toUpperCase());
                 letter++;
             }
@@ -191,10 +201,10 @@ async function startGame() {
         else if (event.key == "Backspace") {
             if (guess.length > 0) {
                 letter--;
-                tiles[(attempts * 5) + letter].style.border = "1px #d1d1d1 solid";
-                tableCells[(attempts * 5) + letter].classList.remove("popout");
-                inputLetters[(attempts * 5) + letter].innerHTML = "";
-                displayLetters[(attempts * 5) + letter].innerHTML = "";
+                tiles[((attempts - 1) * 5) + letter].style.border = "1px #d1d1d1 solid";
+                tableCells[((attempts - 1) * 5) + letter].classList.remove("popout");
+                inputLetters[((attempts - 1) * 5) + letter].innerHTML = "";
+                displayLetters[((attempts - 1) * 5) + letter].innerHTML = "";
                 guess.pop();
             }
         }
@@ -216,14 +226,14 @@ async function startGame() {
             else if (result == true) {
                 for (let i = 0; i < 5; i++) {
                     (function(i) {
-                        var tileToAnimate = tiles[(attempts * 5) + i];
+                        var tileToAnimate = tiles[((attempts - 1) * 5) + i];
                         setTimeout(function() {
                             tileToAnimate.classList.add("reveal-letter");
                         }, i * 500);
                     })(i);
                     
-                    tileBacks[(attempts * 5) + i].style.backgroundColor = "#40c74b";
-                    displayLetters[(attempts * 5) + i].style.color = "white";
+                    tileBacks[((attempts - 1) * 5) + i].style.backgroundColor = "#40c74b";
+                    displayLetters[((attempts - 1) * 5) + i].style.color = "white";
                 }
                 setTimeout(function() { //wait for the characters to be revealed (wait for animation to complete) and 
                     //then display the message
@@ -234,8 +244,11 @@ async function startGame() {
                         dialog.classList.remove("fade");
                     }, 2500);
                 }, 2500);
+
+                //push current game to list of games
+                games.push(game);
             }
-            //a list of correct positions and letters was returned
+            //a list of correct positions and letters, and incorrect letters was returned
             else if (result.length == 3) {
                 let correctPositions = result[0];
                 let correctLetters = result[1];
@@ -257,19 +270,33 @@ async function startGame() {
 
                 for (let i = 0; i < colours.length; i++) {
                     (function(i) {
-                        var tileToAnimate = tiles[(attempts * 5) + i];
+                        var tileToAnimate = tiles[((attempts - 1) * 5) + i];
                         setTimeout(function() {
                             tileToAnimate.classList.add("reveal-letter");
                         }, i * 500);
                     })(i);
 
-                    tileBacks[(attempts * 5) + i].style.backgroundColor = colours[i];
-                    displayLetters[(attempts * 5) + i].style.color = "white";
+                    tileBacks[((attempts - 1) * 5) + i].style.backgroundColor = colours[i];
+                    displayLetters[((attempts - 1) * 5) + i].style.color = "white";
                 }
-
+                console.log(attempts);
                 //only allow the user to go to the next attempt if the user hasn't correctly guessed the word yet
                 if (attempts < 6) {
                     attempts++;
+                }
+                //if the user uses up all 6 attempts, the game ends (the user loses)
+                else {
+                    setTimeout(function() { //wait for the characters to be revealed (wait for animation to complete) and 
+                        //then display the message
+                        dialog.classList.add("fade");
+                        message.innerHTML = "The correct word is: " + game.getCurrentWord();
+                        //once the animation ends, remove the class so that the animation can play again on the next iteration
+                        setTimeout(function() {
+                            dialog.classList.remove("fade");
+                        }, 2500);
+                    }, 2500);
+                    //push current game to list of games
+                    games.push(game);
                 }
                 //only reset the letter count and the current guess if the user can continue playing
                 //otherwise, the game prevents the user from making further guesses
