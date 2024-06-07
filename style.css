@@ -7,6 +7,24 @@ body {
     height: 100vh;
 }
 
+.dialog {
+    background: black;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 1;
+    padding: 1%;
+    border-radius: 2.5%;
+    opacity: 0%;
+}
+
+.message {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: white;
+}
+
 .tiles {
     width: 40%;
     margin: auto;
@@ -58,6 +76,24 @@ body {
     color: black;
     text-transform: uppercase;
 }
+
+.fade {
+    animation: fade 2.5s ease;
+    -webkit-animation: fade 2.5s ease;
+}
+@keyframes fade {
+    from{opacity: 0%}
+    20%{opacity: 100%}
+    80%{opacity: 100%}
+    to{opacity: 0%}
+}
+@-webkit-keyframes fade {
+    from{opacity: 0%}
+    20%{opacity: 100%}
+    80%{opacity: 100%}
+    to{opacity: 0%}
+}
+
 
 .popout {
     animation: popout 0.25s ease;
