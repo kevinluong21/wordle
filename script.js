@@ -166,6 +166,7 @@ async function startGame() {
     game.start();
 
     var guess = [];
+    var gameOver = false;
     var attempts = 1; //the row/word that the user is currently on
     var letter = 0; //the letter that the user is entering
     var dialog = document.getElementsByClassName("dialog")[0];
@@ -201,7 +202,7 @@ async function startGame() {
         }
         //if the key pressed was backspace, erase a letter
         else if (event.key == "Backspace") {
-            if (guess.length > 0) {
+            if (guess.length > 0 && !gameOver) {
                 letter--;
                 tiles[((attempts - 1) * 5) + letter].style.border = "1px #d1d1d1 solid";
                 tableCells[((attempts - 1) * 5) + letter].classList.remove("popout");
@@ -236,6 +237,7 @@ async function startGame() {
                     
                     tileBacks[((attempts - 1) * 5) + i].style.backgroundColor = "#40c74b";
                     displayLetters[((attempts - 1) * 5) + i].style.color = "white";
+                    gameOver = true;
                 }
                 setTimeout(function() { //wait for the characters to be revealed (wait for animation to complete) and 
                     //then display the message
@@ -298,6 +300,7 @@ async function startGame() {
                             dialog.classList.remove("fade");
                         }, 2500);
                     }, 2500);
+                    gameOver = true;
                     //set the score for this round
                     game.setAttempts(attempts + 1);
                     //push current game to list of games
