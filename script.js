@@ -1,7 +1,7 @@
 var Game = (function() {
     var game = {};
-    game.score = 0;
-    game.highScore = 0;
+    game.attempts = 0; //the number of attempts that the user used to guess the word is their "score"
+    //if the user exceeds 6 attempts, their score is 7
     game.currentWord = "";
     game.wordInventory = ["Happy", "Plain", "Angry"]; //list of possible words to guess
     game.guesses = []; //list of all user's guesses
@@ -9,17 +9,8 @@ var Game = (function() {
     game.dictionary; //the list of words to check whether the word exists
 
     game.start = function(dictionary) {
-        //if the current score is higher than the high score, set high score to this score
-        if (game.score > game.highScore) {
-            game.highScore = game.score;
-        }
-        
-        game.score = 0.0; //reset score
-        //set a new word to play (keep looping if the current word matches the word that was just played)
-        do {
-            var currentWord = game.wordInventory[Math.floor(Math.random() * game.wordInventory.length)];
-        } while (currentWord == game.currentWord);
-
+        //set a new word to play
+        var currentWord = game.wordInventory[Math.floor(Math.random() * game.wordInventory.length)];
         game.currentWord = currentWord.toUpperCase();
 
         game.dictionary = dictionary;
@@ -27,6 +18,10 @@ var Game = (function() {
 
     game.getCurrentWord = function() {
         return game.currentWord;
+    }
+
+    game.setAttempts = function(attempts) {
+        game.attempts = attempts;
     }
 
     //check that the length of the input is exactly 5
@@ -244,7 +239,8 @@ async function startGame() {
                         dialog.classList.remove("fade");
                     }, 2500);
                 }, 2500);
-
+                //set the score for this round
+                game.setAttempts(attempts);
                 //push current game to list of games
                 games.push(game);
             }
@@ -279,7 +275,7 @@ async function startGame() {
                     tileBacks[((attempts - 1) * 5) + i].style.backgroundColor = colours[i];
                     displayLetters[((attempts - 1) * 5) + i].style.color = "white";
                 }
-                console.log(attempts);
+
                 //only allow the user to go to the next attempt if the user hasn't correctly guessed the word yet
                 if (attempts < 6) {
                     attempts++;
@@ -295,6 +291,8 @@ async function startGame() {
                             dialog.classList.remove("fade");
                         }, 2500);
                     }, 2500);
+                    //set the score for this round
+                    game.setAttempts(attempts + 1);
                     //push current game to list of games
                     games.push(game);
                 }
