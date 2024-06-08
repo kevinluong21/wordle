@@ -128,9 +128,7 @@ var Game = (function() {
 var games = []; //stores a list of Game modules that were played
 
 function startGame() {
-    // var dictionary = await openFile("dictionary.txt");
     var game = Game();
-    // game.start(dictionary);
     game.start();
 
     var guess = [];
