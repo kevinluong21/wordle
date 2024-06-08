@@ -1,3 +1,6 @@
+//Datamuse API is used to check whether the input is an actual word.
+//The API can be found at https://www.datamuse.com/api/
+
 var Game = (function() {
     var game = {};
     game.attempts = 0; //the number of attempts that the user used to guess the word is their "score"
@@ -14,14 +17,6 @@ var Game = (function() {
         game.currentWord = currentWord.toUpperCase();
     }
 
-    // game.start = function(dictionary) {
-    //     //set a new word to play
-    //     var currentWord = game.wordInventory[Math.floor(Math.random() * game.wordInventory.length)];
-    //     game.currentWord = currentWord.toUpperCase();
-
-    //     game.dictionary = dictionary;
-    // }
-
     game.getCurrentWord = function() {
         return game.currentWord;
     }
@@ -30,27 +25,20 @@ var Game = (function() {
         game.attempts = attempts;
     }
 
-    //check that the length of the input is exactly 5
-    function checkLength(input) {
-        if (input.length != game.wordLength) {
+    //check that the input is an actual word using the Datamuse API
+    async function isWord(input) {
+        try {
+            var data = await fetch("https://api.datamuse.com/words?sp=" + input);
+            var words = await data.json();
+            console.log(words);
+            if (words.find(item => item.word == input.toLowerCase())) {
+                return true;
+            }
             return false;
         }
-        return true;
-    }
-
-    //check that all the values in the input are letters (cannot contain special characters, numbers, or spaces)
-    function isAlpha(input) {
-        const pattern = /^[a-zA-Z]+$/;
-        //pattern.test() will return true if input only contains letters and false otherwise
-        return pattern.test();
-    }
-
-    //check that the input is an actual word
-    function isWord(input) {
-        if (game.dictionary.indexOf(input) == -1) {
-            return false;
+        catch (error) {
+            console.log(error);
         }
-        return true;
     }
 
     function checkPositions(inputArray, currentArray) {
@@ -100,18 +88,14 @@ var Game = (function() {
         game.guesses.push(guess);
     }
 
-    game.checkWord = function(input) {
+    game.checkWord = async function(input) {
         input = input.toUpperCase();
-        //if the input fails any of the checks, then the input is invalid
-        if (!checkLength(input)) {
-            return "Input must be 5 characters";
+
+        //make sure the input is an actual word
+        let validWord = await isWord(input);
+        if (!validWord) {
+            return "Not a word";
         }
-        else if (!isAlpha(input)) {
-            return "Input can only contain letters";
-        }
-        // else if (!isWord(input)) {
-        //     return "Not a word";
-        // }
 
         //add guess to list
         addGuess(input);
@@ -141,25 +125,9 @@ var Game = (function() {
     return game;
 });
 
-//fetch the list of words from dictionary.txt
-// async function openFile(path) {
-//     try {
-//         var data = await fetch(path);
-//         var words = await data.text();
-//         var dictionary = words.split("\n");
-//         dictionary = dictionary.map(word => word.toUpperCase());
-//         return dictionary;
-//     }
-//     catch (error) {
-//         console.log(error);
-//     }
-// }
-
 var games = []; //stores a list of Game modules that were played
 
-//since the fetching of a file is an async process and it needs to be fully loaded before the game starts,
-//wrap the entire game in an async function so that it can wait for the dictionary to be fully loaded before starting
-async function startGame() {
+function startGame() {
     // var dictionary = await openFile("dictionary.txt");
     var game = Game();
     // game.start(dictionary);
@@ -187,7 +155,8 @@ async function startGame() {
         displayLetters.push(tileBacks[i].children[0]);
     }
 
-    window.addEventListener("keydown", (event) => {
+    //fetching is an async process, so the event listener must call an async function
+    window.addEventListener("keydown", async (event) => {
         //for a single character that is pressed down, check that it is a letter (lowercase or uppercase)
         const pattern = /[a-zA-Z]/;
         if (event.key.length == 1 && pattern.test(event.key)) {
@@ -213,7 +182,8 @@ async function startGame() {
         }
         //if the key pressed was enter and the user entered 5 letters, submit the guess
         else if (event.key == "Enter" && guess.length == 5) {
-            let result = game.checkWord(guess.join(""));
+            //checkWord is an async function, so we need to wait for it to finish before continuing
+            let result = await game.checkWord(guess.join(""));
 
             //word does not exist (error)
             //if it encounters an error, it will not allow the user to go to the next attempt
