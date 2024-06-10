@@ -128,8 +128,6 @@ var Game = (function() {
     return game;
 });
 
-export default Game;
-
 var games = []; //stores a list of Game modules that were played
 
 function startGame() {
