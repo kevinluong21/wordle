@@ -1,3 +1,5 @@
+// modules are not supported for non-http access
+
 //Datamuse API is used to check whether the input is an actual word.
 //The API can be found at https://www.datamuse.com/api/
 
