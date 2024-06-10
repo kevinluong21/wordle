@@ -1,4 +1,4 @@
-import Game from "/Game.js";
+import Game from "/game.js";
 
 var games = []; //stores a list of Game modules that were played
 
