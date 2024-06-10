@@ -7,6 +7,18 @@
     <title>Wordle by JK</title>
 </head>
 <body>
+    <div class="info">
+        <button class="helpButton" id="helpButton" onclick="show('helpPopup')">?</button>
+        <div class="helpPopup" id="helpPopup">
+            <h3>Instructions for Wordle</h3>
+            <p>Guess the five-letter word in six tries. After guessing a word, click enter to submit guess.</p>
+            <p>Green letters means that the letter is correct and in the right spot.</p>
+            <p>Yellow letters means that the letter is correct and in the wrong spot.</p>
+            <p>Grey letters means that the letter is not in the word at any spot.</p>
+            <a href="#" onclick="hide('helpPopup')">Close</a>
+        </div>
+        <h1 class="title">Wordle</h1>
+    </div>
     <div class="dialog">
         <p class="message"></p>
     </div>

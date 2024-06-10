@@ -130,3 +130,24 @@ body {
         -webkit-transform: rotateX(180deg);
     }
 }
+
+.helpButton {
+    padding: 10px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+.helpPopup {
+    display: none; 
+    position: fixed; 
+    padding: 10px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #FFF;
+    border: 5px solid grey;
+    z-index: 20;
+    border-radius: 10px;
+}
