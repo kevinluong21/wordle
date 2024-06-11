@@ -131,15 +131,32 @@ body {
     }
 }
 
+.menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    font-family: Arial, Helvetica, sans-serif;;
+    margin-left: 10px;
+}
+
 .helpButton {
+    margin-right: 10px;
     padding: 10px 10px;
     font-size: 14px;
     cursor: pointer;
-    border: none;
-    border-radius: 5px;
+    border: grey;
+    border-radius: 5%;
+}
+
+.helpButton:hover {
+    background-color: grey;
 }
 
 .helpPopup {
+    font-family: Arial, Helvetica, sans-serif;
     display: none; 
     position: fixed; 
     padding: 10px;
@@ -147,7 +164,20 @@ body {
     top: 50%;
     transform: translate(-50%, -50%);
     background: #FFF;
-    border: 5px solid grey;
+    border: 1px solid #d1d1d1;
     z-index: 20;
-    border-radius: 10px;
+    border-radius: 5%;
+    box-shadow: 5px 10px grey;
+}
+
+.popupHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popupHeader a {
+    margin-left: auto;
+    padding-right: 5%;
+    cursor: pointer;
 }
