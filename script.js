@@ -28,6 +28,10 @@ var Game = (function() {
         game.attempts = attempts;
     }
 
+    game.getAttempts = function() {
+        return game.attempts;
+    }
+
     //check that the input is an actual word using the Datamuse API
     async function isWord(input) {
         try {
@@ -130,9 +134,101 @@ var Game = (function() {
 
 var games = []; //stores a list of Game modules that were played
 
+//build the game board before the start of each game
+//this way, the board can be quickly cleared when a new game is started
+function buildGame() {
+    var oldTiles = document.getElementsByClassName("tiles")[0];
+    var tiles = document.createElement("table");
+    tiles.classList.add("tiles");
+
+    for (let i = 0; i < 6; i++) {
+        var row = document.createElement("tr");
+
+        for (let j = 0; j < 5; j++) {
+            var cell = document.createElement("td");
+            var tile = document.createElement("div");
+            var tileFront = document.createElement("div");
+            var tileBack = document.createElement("div");
+            var inputLetter = document.createElement("h1");
+            var displayLetter = document.createElement("h1");
+    
+            tile.classList.add("tile");
+            tileFront.classList.add("tile-front");
+            tileBack.classList.add("tile-back");
+            inputLetter.classList.add("input-letter");
+            displayLetter.classList.add("input-letter");
+    
+            tileFront.appendChild(inputLetter);
+            tileBack.appendChild(displayLetter);
+            tile.appendChild(tileFront);
+            tile.appendChild(tileBack);
+    
+            cell.appendChild(tile);
+            row.appendChild(cell);
+        }
+        tiles.appendChild(row);
+    }
+    if (oldTiles) {
+        document.body.replaceChild(tiles, oldTiles);
+    }
+    else {
+        document.body.appendChild(tiles);
+    }
+}
+
+function displayAllGames() {
+    var popup = document.getElementsByClassName("popup")[0];
+    var gamesTable = document.createElement("table");
+    gamesTable.classList.add("games-table");
+
+    for (let i = 0; i < games.length; i++) {
+        var row = document.createElement("tr");
+
+        var rowNum = document.createElement("td");
+        rowNum.innerHTML = i + 1;
+
+        var correctWord = document.createElement("td");
+        correctWord.innerHTML = games[i].getCurrentWord();
+
+        var result = document.createElement("td");
+        if (games[i].getAttempts() == 7) {
+            result.innerHTML = "Loss";
+        }
+        else {
+            result.innerHTML = "Won in " + games[i].getAttempts() + " guesses";
+        }
+
+        row.appendChild(rowNum);
+        row.appendChild(correctWord);
+        row.appendChild(result);
+        gamesTable.appendChild(row);
+        
+        //insert the table before the play again button
+        popup.insertBefore(gamesTable, popup.children[1]);
+    }
+}
+
+function endingPopup(result) {
+    var popup = document.getElementsByClassName("popup-bg")[0];
+    var popupTitle = document.getElementsByClassName("popup-title")[0];
+
+    popup.style.display = "block";
+    
+    if (result == "win") {
+        popupTitle.innerHTML = "Congratulations!";
+    }
+    else if (result == "loss") {
+        popupTitle.innerHTML = "Better luck next time!";
+    }
+    
+    displayAllGames();
+}
+
 function startGame() {
     var game = Game();
     game.start();
+
+    buildGame(); //build the game board at the start of each game
 
     var guess = [];
     var gameOver = false;
@@ -141,12 +237,16 @@ function startGame() {
     var dialog = document.getElementsByClassName("dialog")[0];
     var message = document.getElementsByClassName("message")[0];
     var table = document.getElementsByClassName("tiles")[0];
-    var tableCells = table.querySelectorAll("td");;
+    var tableCells = table.querySelectorAll("td");
     var tiles = document.getElementsByClassName("tile");
     var tileFronts = document.getElementsByClassName("tile-front");
     var tileBacks = document.getElementsByClassName("tile-back");
+    var endingScreen = document.getElementsByClassName("popup-bg")[0];
     var inputLetters = [];
     var displayLetters = [];
+
+    //disable the ending screen once starting a new game
+    endingScreen.style.display = "none";
 
     for (let i = 0; i < tileFronts.length; i++) {
         inputLetters.push(tileFronts[i].children[0]);
@@ -215,8 +315,10 @@ function startGame() {
                     dialog.classList.add("fade");
                     message.innerHTML = "Great job!";
                     //once the animation ends, remove the class so that the animation can play again on the next iteration
+                    //and display the ending screen
                     setTimeout(function() {
                         dialog.classList.remove("fade");
+                        endingPopup("win");
                     }, 2500);
                 }, 2500);
                 //set the score for this round
@@ -267,8 +369,10 @@ function startGame() {
                         dialog.classList.add("fade");
                         message.innerHTML = "The correct word is: " + game.getCurrentWord();
                         //once the animation ends, remove the class so that the animation can play again on the next iteration
+                        //and display the ending screen
                         setTimeout(function() {
                             dialog.classList.remove("fade");
+                            endingPopup("win");
                         }, 2500);
                     }, 2500);
                     gameOver = true;
@@ -276,6 +380,8 @@ function startGame() {
                     game.setAttempts(attempts + 1);
                     //push current game to list of games
                     games.push(game);
+
+                    endingPopup("loss");
                 }
                 //only reset the letter count and the current guess if the user can continue playing
                 //otherwise, the game prevents the user from making further guesses
@@ -286,14 +392,15 @@ function startGame() {
     });
 }
 
+//on load, execute the startGame() function
 window.addEventListener("load", startGame);
 
 // When user clicks on button, show message
-function show(message){
+function show(message) {
     document.getElementById(message).style.display = 'block'
 }
 
 // When user clicks on button, hide mssage
-function hide(message){
+function hide(message) {
     document.getElementById(message).style.display = 'none'
 }

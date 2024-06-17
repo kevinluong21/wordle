@@ -16,18 +16,31 @@
                     <h3>Instructions for Wordle</h3>
                     <a href="#" onclick="hide('helpPopup')">X</a>
                 </div>
-                <p>Guess the five-letter word in six tries. After guessing a word, click enter to submit guess.</p>
-                <p>Green letters means that the letter is correct and in the right spot.</p>
-                <p>Yellow letters means that the letter is correct and in the wrong spot.</p>
-                <p>Grey letters means that the letter is not in the word at any spot.</p>
+                <p>Guess the five-letter word in six tries. After guessing a word, hit enter to submit your guess.</p>
+                <p>A green letter means that the letter is correct and in the right spot.</p>
+                <p>A yellow letter means that the letter is correct but in the wrong spot.</p>
+                <p>A grey letter means that the letter is not in the word at all.</p>
             </div> 
         </div>
     </header>
+    <!-- game over popup -->
+    <div class="popup-bg">
+        <div class="popup">
+            <h1 class="popup-title"></h1>
+            <div class="play-again">
+                <button class="play-again-btn" onclick="startGame()">
+                    Play Again
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="dialog">
         <p class="message"></p>
     </div>
-    <table class="tiles">
-        <tr id="word-1">
+
+    <!-- <table class="tiles">
+        <tr>
             <td>
                 <div class="tile">
                     <div class="tile-front">
@@ -79,7 +92,7 @@
                 </div>
             </td>
         </tr>
-        <tr id="word-2">
+        <tr>
             <td>
                 <div class="tile">
                     <div class="tile-front">
@@ -131,7 +144,7 @@
                 </div>
             </td>
         </tr>
-        <tr id="word-3">
+        <tr>
             <td>
                 <div class="tile">
                     <div class="tile-front">
@@ -183,7 +196,7 @@
                 </div>
             </td>
         </tr>
-        <tr id="word-4">
+        <tr>
             <td>
                 <div class="tile">
                     <div class="tile-front">
@@ -235,7 +248,7 @@
                 </div>
             </td>
         </tr>
-        <tr id="word-5">
+        <tr>
             <td>
                 <div class="tile">
                     <div class="tile-front">
@@ -287,7 +300,7 @@
                 </div>
             </td>
         </tr>
-        <tr id="word-6">
+        <tr>
             <td>
                 <div class="tile">
                     <div class="tile-front">
@@ -339,7 +352,7 @@
                 </div>
             </td>
         </tr>
-    </table>
+    </table> -->
     <!-- <script src="script.js" type="module"></script> -->
     <!-- modules are not supported on non-http access -->
     <script src="script.js"></script>
