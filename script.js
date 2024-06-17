@@ -256,7 +256,10 @@ function startGame() {
     }
 
     //fetching is an async process, so the event listener must call an async function
-    window.addEventListener("keydown", async (event) => {
+    window.addEventListener("keydown", keydownHandler);
+
+    async function keydownHandler(event) {
+        console.log(guess);
         //for a single character that is pressed down, check that it is a letter (lowercase or uppercase)
         const pattern = /[a-zA-Z]/;
         if (event.key.length == 1 && pattern.test(event.key)) {
@@ -324,6 +327,9 @@ function startGame() {
                 game.setAttempts(attempts);
                 //push current game to list of games
                 games.push(game);
+
+                window.removeEventListener("keydown", keydownHandler); //remove keydown event so that when startGame is called
+                //again, a new event listener is added
             }
             //a list of correct positions and letters, and incorrect letters was returned
             else if (result.length == 3) {
@@ -371,7 +377,7 @@ function startGame() {
                         //and display the ending screen
                         setTimeout(function() {
                             dialog.classList.remove("fade");
-                            endingPopup("win");
+                            endingPopup("loss");
                         }, 2500);
                     }, 2500);
                     gameOver = true;
@@ -380,7 +386,8 @@ function startGame() {
                     //push current game to list of games
                     games.push(game);
 
-                    endingPopup("loss");
+                    window.removeEventListener("keydown", keydownHandler); //remove keydown event so that when startGame is called
+                    //again, a new event listener is added
                 }
                 //only reset the letter count and the current guess if the user can continue playing
                 //otherwise, the game prevents the user from making further guesses
@@ -388,7 +395,7 @@ function startGame() {
                 guess = [];
             }
         }
-    });
+    }
 }
 
 //on load, execute the startGame() function
