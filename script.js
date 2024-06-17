@@ -178,7 +178,6 @@ function buildGame() {
 
 function displayAllGames() {
     var popup = document.getElementsByClassName("popup")[0];
-    var oldGamesTable = document.getElementsByClassName("games-table")[0];
     var gamesTable = document.createElement("table");
     gamesTable.classList.add("games-table");
 
@@ -204,7 +203,7 @@ function displayAllGames() {
         row.appendChild(result);
         gamesTable.appendChild(row);
         
-        popup.replaceChild(gamesTable, oldGamesTable);
+        popup.replaceChild(gamesTable, popup.children[1]); //replace the original table with the new table
     }
 }
 
