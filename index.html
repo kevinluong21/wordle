@@ -9,8 +9,13 @@
 <body>
     <header>
         <div class="menu">
-            <button class="helpButton" id="helpButton" onclick="show('helpPopup')">?</button>
             <h1 class="title">Wordle</h1>
+            
+            <div class="buttons">
+                <button class="helpButton" id="helpButton" onclick="show('helpPopup')">?</button>
+                <button class="helpButton" onclick="show('endingScreen')">&#x1F4CA;</button>
+            </div>
+
             <div class="helpPopup" id="helpPopup">
                 <div class="popupHeader">
                     <h3>Instructions for Wordle</h3>
@@ -24,8 +29,9 @@
         </div>
     </header>
     <!-- game over popup -->
-    <div class="popup-bg">
+    <div class="popup-bg" id="endingScreen">
         <div class="popup">
+            <div class="close-btn" onclick='hide("endingScreen")'>&#x2715;</div>
             <h1 class="popup-title"></h1>
             <table class="games-table"></table>
             <div class="play-again">

@@ -203,15 +203,14 @@ function displayAllGames() {
         row.appendChild(result);
         gamesTable.appendChild(row);
         
-        popup.replaceChild(gamesTable, popup.children[1]); //replace the original table with the new table
+        popup.replaceChild(gamesTable, popup.children[2]); //replace the original table with the new table
     }
 }
 
 function endingPopup(result) {
-    var popup = document.getElementsByClassName("popup-bg")[0];
     var popupTitle = document.getElementsByClassName("popup-title")[0];
 
-    popup.style.display = "block";
+    show("endingScreen");
     
     if (result == "win") {
         popupTitle.innerHTML = "Congratulations!";
@@ -245,7 +244,7 @@ function startGame() {
     var displayLetters = [];
 
     //disable the ending screen once starting a new game
-    endingScreen.style.display = "none";
+    hide("endingScreen");
 
     for (let i = 0; i < tileFronts.length; i++) {
         inputLetters.push(tileFronts[i].children[0]);
