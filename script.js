@@ -178,6 +178,7 @@ function buildGame() {
 
 function displayAllGames() {
     var popup = document.getElementsByClassName("popup")[0];
+    var oldGamesTable = document.getElementsByClassName("games-table")[0];
     var gamesTable = document.createElement("table");
     gamesTable.classList.add("games-table");
 
@@ -203,8 +204,7 @@ function displayAllGames() {
         row.appendChild(result);
         gamesTable.appendChild(row);
         
-        //insert the table before the play again button
-        popup.insertBefore(gamesTable, popup.children[1]);
+        popup.replaceChild(gamesTable, oldGamesTable);
     }
 }
 
