@@ -1,5 +1,8 @@
 # Wordle
 
+## Design Document
+Refer to [Design Document](/docs/design_system.md) for an detailed design description of the game.
+
 ## Game Components
 ### Getting Started
 To play Wordle, follow these steps:
