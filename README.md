@@ -13,10 +13,10 @@ The goal of the game is to guess the correct five-letter word within six tries. 
 - A yellow letter means that the letter is correct but in the wrong spot. 
 - A grey letter means that the letter is not in the word at all.
 
-### Instructions
+### Get Instructions
 For detailed instructions to refer to while in-game, click on the question mark icon located on the top right to access the instructions for the game. This will not restart or affect your progress in the game. 
 
-### Tracking The Score
+### Get Scores
 For information relating to your scores and progress, click on the Scoreboard icon located on the top right to access the scoreboard. The scoreboard tracks information such as your number of games played, and game history such as the hidden word for each game, and whether you won or lost the game.
 
 ### Play Again
