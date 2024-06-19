@@ -99,43 +99,42 @@ Once a user submits a guess, the checkWord() function is called. The function ad
 * correctPositions is an array of indices that indicate which letters are correct (letters are in correctWord and in the correct position). These letters will be indicated by a green tile in the front-end. 
 * correctLetters is an array of indices that indicate which letters are in correctWord, but in the wrong position. These letters are indicated by a yellow tile in the front-end.
 * incorrectLetters is an array of indices that indicate which letters are not in correctWord at all. These letters are indicated by a gray tile in the front-end.  
-<br>
-    ```javascript
-    game.checkWord = async function(input) {
-        input = input.toUpperCase();
 
-        //make sure the input is an actual word
-        let validWord = await isWord(input);
-        if (!validWord) {
-            return "Not a word";
-        }
+```javascript
+game.checkWord = async function(input) {
+    input = input.toUpperCase();
 
-        //add guess to list
-        addGuess(input);
-        
-        //return true if the words are exactly the same
-        if (input == game.correctWord) {
-            return true;
-        }
-        
-        //if not the same, check which letters are in the correct position and/or in the word
-        //split the strings into letters
-        let inputArray = input.split("");
-        let current = game.correctWord.split("");
-        let correctPositions = []; //correct letter and position (marked as green)
-        let correctLetters = []; //letter is in word but wrong position (marked as yellow)
-        let incorrectLetters = []; //letter is not in word (marked as grey)
-
-        correctPositions = checkPositions(inputArray, current);
-
-        let temp = checkLetters(inputArray, current, correctPositions);
-        correctLetters = temp[0];
-        incorrectLetters = temp[1];
-
-        return [correctPositions, correctLetters, incorrectLetters];
+    //make sure the input is an actual word
+    let validWord = await isWord(input);
+    if (!validWord) {
+        return "Not a word";
     }
-    ```
 
+    //add guess to list
+    addGuess(input);
+    
+    //return true if the words are exactly the same
+    if (input == game.correctWord) {
+        return true;
+    }
+    
+    //if not the same, check which letters are in the correct position and/or in the word
+    //split the strings into letters
+    let inputArray = input.split("");
+    let current = game.correctWord.split("");
+    let correctPositions = []; //correct letter and position (marked as green)
+    let correctLetters = []; //letter is in word but wrong position (marked as yellow)
+    let incorrectLetters = []; //letter is not in word (marked as grey)
+
+    correctPositions = checkPositions(inputArray, current);
+
+    let temp = checkLetters(inputArray, current, correctPositions);
+    correctLetters = temp[0];
+    incorrectLetters = temp[1];
+
+    return [correctPositions, correctLetters, incorrectLetters];
+}
+```
 #### Checking The Validity Of A Guess
 The checkWord() function uses the Datamuse API to check whether the word exists in the English dictionary. The user's guess is passed in as an input and the function checks if the retrieved JSON file is empty or if the guess is in the JSON file. The Datamuse API will return an empty JSON file if there is no word or no similar word to the input. This means that the guess is invalid. Sometimes, the API may return words that it infers is what the word is supposed to be spelled, so the function will then check if the input is exactly in the JSON file. If not, the guess is considered invalid. If a guess is invalid, the front-end will deny the guess and prompt the user to enter their guess again.  
 
