@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Mockup | Wordle by JK</title>
+    <style>
+        .menu {
+            position: relative;
+            height: 50%;
+        }
+
+        .title {
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+        }
+
+        .buttons {
+            position: absolute;
+            right: 10%;
+            top: 0;
+
+        }
+
+        .helpButton {
+            /* margin-right: 10px; */
+            padding: 10px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border: grey;
+            border-radius: 5%;
+        }
+
+        .helpButton:hover {
+            background-color: grey;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="menu">
+            <h1 class="title">Wordle</h1>
+
+            <div class="buttons">
+                <button class="helpButton" id="helpButton" onclick="show('helpPopup')">?</button>
+                <button class="helpButton" onclick="show('endingScreen')">&#x1F4CA;</button>
+            </div>
+        </div>
+    </header>
+</body>
+</html>

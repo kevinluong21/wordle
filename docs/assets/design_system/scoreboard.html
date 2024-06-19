@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoreboard Mockup | Wordle by JK</title>
+    <style>
+        .popup-bg {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+        }
+
+        .popup {
+            width: 50%;
+            height: 50%;
+            padding: 5%;
+            background: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 5%;
+            right: 5%;
+            font-size: 150%;
+        }
+
+        .close-btn:hover {
+            cursor: pointer;
+        }
+
+        .popup-title {
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .games-table {
+            width: 90%;
+            margin: auto;
+            margin-bottom: 5%;
+        }
+
+        .games-table td {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .play-again {
+            margin: auto;
+            width: fit-content;
+        }
+
+        .play-again-btn {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #40c74b; /* Green */
+            border: none;
+            border-radius: 20px;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .play-again-btn:hover {
+            cursor: pointer;
+            background-color: #57ff65;
+        }
+    </style>
+</head>
+<body>
+    <div class="popup-bg" id="endingScreen">
+        <div class="popup">
+            <div class="close-btn">&#x2715;</div>
+            <h1 class="popup-title">Congratulations!</h1>
+            <table class="games-table">
+                <tr>
+                    <td>1</td>
+                    <td>CRANE</td>
+                    <td>Won in 3 guesses</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>HOUSE</td>
+                    <td>Won in 6 guesses</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>HAPPY</td>
+                    <td>Loss</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>ANGRY</td>
+                    <td>Won in 2 guesses</td>
+                </tr>
+            </table>
+            <div class="play-again">
+                <button class="play-again-btn">
+                    Play Again
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

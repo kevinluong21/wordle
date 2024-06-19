@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructions Mockup | Wordle by JK</title>
+    <style>
+        .helpPopup {
+            font-family: Arial, Helvetica, sans-serif;
+            display: block; 
+            position: fixed; 
+            padding: 10px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #FFF;
+            border: 1px solid #d1d1d1;
+            z-index: 20;
+            border-radius: 5%;
+            box-shadow: 5px 10px grey;
+        }
+
+        .popupHeader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popupHeader a {
+            margin-left: auto;
+            padding-right: 5%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="helpPopup" id="helpPopup">
+        <div class="popupHeader">
+            <h3>Instructions for Wordle</h3>
+            <a href="#">X</a>
+        </div>
+        <p>Guess the five-letter word in six tries. After guessing a word, hit enter to submit your guess.</p>
+        <p>A green letter means that the letter is correct and in the right spot.</p>
+        <p>A yellow letter means that the letter is correct but in the wrong spot.</p>
+        <p>A grey letter means that the letter is not in the word at all.</p>
+    </div> 
+</body>
+</html>

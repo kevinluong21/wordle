@@ -175,6 +175,7 @@ function buildGame() {
     }
 }
 
+//build a table of all the rounds that the user has played
 function displayAllGames() {
     var popup = document.getElementsByClassName("popup")[0];
     var gamesTable = document.createElement("table");
