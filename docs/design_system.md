@@ -99,7 +99,7 @@ Once a user submits a guess, the checkWord() function is called. The function ad
 * correctPositions is an array of indices that indicate which letters are correct (letters are in correctWord and in the correct position). These letters will be indicated by a green tile in the front-end. 
 * correctLetters is an array of indices that indicate which letters are in correctWord, but in the wrong position. These letters are indicated by a yellow tile in the front-end.
 * incorrectLetters is an array of indices that indicate which letters are not in correctWord at all. These letters are indicated by a gray tile in the front-end.  
-
+<br>
     game.checkWord = async function(input) {
         input = input.toUpperCase();
 
