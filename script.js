@@ -8,20 +8,19 @@ var Game = (function() {
     var game = {};
     game.attempts = 0; //the number of attempts that the user used to guess the word is their "score"
     //if the user exceeds 6 attempts, their score is 7
-    game.currentWord = "";
+    game.correctWord = "";
     game.wordInventory = ["Happy", "Plain", "Angry"]; //list of possible words to guess
     game.guesses = []; //list of all user's guesses
-    game.wordLength = 5; //set the length of the word to guess
-    game.dictionary; //the list of words to check whether the word exists
+    game.wordLength = 5;
 
     game.start = function() {
         //set a new word to play
-        var currentWord = game.wordInventory[Math.floor(Math.random() * game.wordInventory.length)];
-        game.currentWord = currentWord.toUpperCase();
+        var correctWord = game.wordInventory[Math.floor(Math.random() * game.wordInventory.length)];
+        game.correctWord = correctWord.toUpperCase();
     }
 
-    game.getCurrentWord = function() {
-        return game.currentWord;
+    game.getCorrectWord = function() {
+        return game.correctWord;
     }
 
     game.setAttempts = function(attempts) {
@@ -108,14 +107,14 @@ var Game = (function() {
         addGuess(input);
         
         //return true if the words are exactly the same
-        if (input == game.currentWord) {
+        if (input == game.correctWord) {
             return true;
         }
         
         //if not the same, check which letters are in the correct position and/or in the word
         //split the strings into letters
         let inputArray = input.split("");
-        let current = game.currentWord.split("");
+        let current = game.correctWord.split("");
         let correctPositions = []; //correct letter and position (marked as green)
         let correctLetters = []; //letter is in word but wrong position (marked as yellow)
         let incorrectLetters = []; //letter is not in word (marked as grey)
@@ -188,7 +187,7 @@ function displayAllGames() {
         rowNum.innerHTML = i + 1;
 
         var correctWord = document.createElement("td");
-        correctWord.innerHTML = games[i].getCurrentWord();
+        correctWord.innerHTML = games[i].getCorrectWord();
 
         var result = document.createElement("td");
         if (games[i].getAttempts() == 7) {
@@ -371,7 +370,7 @@ function startGame() {
                     setTimeout(function() { //wait for the characters to be revealed (wait for animation to complete) and 
                         //then display the message
                         dialog.classList.add("fade");
-                        message.innerHTML = "The correct word is: " + game.getCurrentWord();
+                        message.innerHTML = "The correct word is: " + game.getCorrectWord();
                         //once the animation ends, remove the class so that the animation can play again on the next iteration
                         //and display the ending screen
                         setTimeout(function() {

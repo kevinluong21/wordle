@@ -35,3 +35,41 @@ Font sizes are chosen to ensure clarity and structure. Headers, including the ti
 
 ### Colours
 The colour palette is carefully curated to provide the user with an enhanced user experience, using high-contrasting colours to emphasize readability and accessibility. All the text in the game is black (#000000), and the main game area features a white background (#FFFFFF). Wordle also uses yellow, green, and grey in their respective tiles to indicate the status of each letter in each guess, based on whether or not the letter is a letter in the word and if it's in the correct position or not. These colours provide immediate visual feedback of the guesses, making the game system easy to understand without needing to read instructions. Refer to [README.md](/README.md) for more details on how the colours correlate to the guesses. Overall, these colour aspects provide a modern, sleek, and visually appealing interface that is both user-friendly and eye-catching.
+
+## Back-End Components
+All of these components can be found in the [script.js](/script.js) file.
+
+### The buildGame() Function
+At the beginning of each game, the gameboard needs to be cleared, especially if the user had just played a round. To make the process easier, the buildGame() function is used to re-generate all of the front-end components of the gameboard, so that everything is reset to its original state quickly and in a simple manner.
+
+### The Keyboard Input
+This game relies on the user entering letters using their keyboard. To prevent the user from entering any unauthorized characters, a keydown event is used to restrict the user's input to letters, the Backspace, and the Space key. Every time a user presses on a key, the keydown event is triggered and it checks whether the key was a letter key (lowercase or capital), the Backspace, or the Enter key.  
+If a letter key is entered, it should then appear on the tile as a visual confirmation of the key being pressed and move to the next empty tile. If the user tries to enter a key again, it will check to see if the guess already has 5 letters. If it already has 5 letters, it will stop capturing the key that the user is entering. If the Backspace is pressed, it should erase the letter that was entered and return to the previous tile. If the guess has 0 letters and the Backspace is pressed, no action is triggered. If the Enter key is pressed, the user must be able to submit their guess only if the guess has 5 letters. If it has any less, pressing Enter will not cause any action. Once a guess is submitted, the user cannot use the Backspace key to modify a previous guess. Guesses are locked once they are submitted.
+
+### Game Module
+Each round of the game runs on a Game module. The module is responsible for storing the number of attempts the user makes (from 0 to 7 where 7 means that the user did not win), the word that needs to be guessed (correctWord), the inventory of words that the module randomly picks from to set correctWord, the guesses that the user submits, checking whether a user's guess is a valid word, and returning the results of a guess. The module makes use of the [Datamuse API](https://www.datamuse.com/api/) to check whether a word that a user submits as a guess is an actual word.
+
+#### Starting A New Game
+The Game module is responsible for keeping track of every round and game. Once a user loads the page or hits "Play Again", a new Game module is created and the correctWord is initialized. correctWord is randomly assigned based on what 5-letter words are in the wordInventory instance variable of the module.
+
+#### Checking A Guess
+Once a user submits a guess, the checkWord() function is called. The function adds the guess to the array of guesses of that round, checks to see if the guess is a valid word using the isWord() function, and then it returns either a boolean or 3 arrays. If the word perfectly matches correctWord, the guess is considered a match and the function returns True to signal the end of the game. Otherwise, the function returns 3 arrays: correctPositions, correctLetters, and incorrectLetters:
+* correctPositions is an array of indices that indicate which letters are correct (letters are in correctWord and in the correct position). These letters will be indicated by a green tile in the front-end. 
+* correctLetters is an array of indices that indicate which letters are in correctWord, but in the wrong position. These letters are indicated by a yellow tile in the front-end.
+* incorrectletters is an array of indices that indicate which letters are not in correctWord at all. These letters are indicated by a gray tile in the front-end.
+
+#### Checking The Validity Of A Guess
+The checkWord() function uses the Datamuse API to check whether the word exists in the English dictionary. The user's guess is passed in as an input and the function checks if the retrieved JSON file is empty or if the guess is in the JSON file. The Datamuse API will return an empty JSON file if there is no word or no similar word to the input. This means that the guess is invalid. Sometimes, the API may return words that it infers is what the word is supposed to be spelled, so the function will then check if the input is exactly in the JSON file. If not, the guess is considered invalid. If a guess is invalid, the front-end will deny the guess and prompt the user to enter their guess again.
+![Invalid Guess](/docs/assets/design_system/dialog_box_invalid_word.png)
+
+#### Checking For Letters That Are In The Correct Position
+checkWord() calls the checkPositions() function to return the correctPositions array. The function essentially iterates through every letter in both the user's guess and the correctWord, checking if there are any letters that match at the same index. If so, it is appended to the correctPositions array. Once it is done, it returns the array. It is possible for the array to be empty if there are no letters that are correct.
+
+#### Checking For Letters That Are In The Word But Wrong Position
+After calling checkPositions(), checkWord() calls the checkLetters() function to return the correctLetters and incorrectLetters arrays. The checkLetters() function starts by going through the correctWord and the user's guess and marking all the letters that we know are already correct as "null". This way, we will not accidentally append the same letters in the correctPositions array into the correctLetters array.  
+It then checks which letters are in the word by checking whether each letter is in correctWord. If it is in correctWord, we mark the letter in correctWord as null and append this index to the correctLetters array. This is due to special cases where the same letter can appear multiple times. For example, "robot" has 2 O's. If a user enters a word with 3 O's, the first 2 O's are considered a correct letter and the last O is considered incorrect. Therefore, we must mark them as null so that we do not accidentally double count the same letter. Once it has iterated through and checked every single letter in the user's guess, it returns the correctLetters and incorrectLetters array.
+
+#### Checking For Letters That Are Not In The Word
+Within the checkLetters() function, as it is checking which letters are in the word, it is also checking which letters are not in the word. If the loop reaches the end of correctWord and cannot find a non-null match, the letter is considered incorrect and is then appended to the incorrectLetters list. The incorrectLetters array is returned alongside the correctLetters array.
+
+### Calculating Results
