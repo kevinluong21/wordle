@@ -40,7 +40,8 @@ The colour palette is carefully curated to provide the user with an enhanced use
 All of these components can be found in the [script.js](/script.js) file.
 
 ### The buildGame() Function
-At the beginning of each game, the gameboard needs to be cleared, especially if the user had just played a round. To make the process easier, the buildGame() function is used to re-generate all of the front-end components of the gameboard, so that everything is reset to its original state quickly and in a simple manner.
+At the beginning of each game, the gameboard needs to be cleared, especially if the user had just played a round. To make the process easier, the buildGame() function is used to re-generate all of the front-end components of the gameboard, so that everything is reset to its original state quickly and in a simple manner.  
+
     function buildGame() {
         var oldTiles = document.getElementsByClassName("tiles")[0];
         var tiles = document.createElement("table");
@@ -98,6 +99,7 @@ Once a user submits a guess, the checkWord() function is called. The function ad
 * correctPositions is an array of indices that indicate which letters are correct (letters are in correctWord and in the correct position). These letters will be indicated by a green tile in the front-end. 
 * correctLetters is an array of indices that indicate which letters are in correctWord, but in the wrong position. These letters are indicated by a yellow tile in the front-end.
 * incorrectLetters is an array of indices that indicate which letters are not in correctWord at all. These letters are indicated by a gray tile in the front-end.  
+
     game.checkWord = async function(input) {
         input = input.toUpperCase();
 
@@ -134,6 +136,7 @@ Once a user submits a guess, the checkWord() function is called. The function ad
 
 #### Checking The Validity Of A Guess
 The checkWord() function uses the Datamuse API to check whether the word exists in the English dictionary. The user's guess is passed in as an input and the function checks if the retrieved JSON file is empty or if the guess is in the JSON file. The Datamuse API will return an empty JSON file if there is no word or no similar word to the input. This means that the guess is invalid. Sometimes, the API may return words that it infers is what the word is supposed to be spelled, so the function will then check if the input is exactly in the JSON file. If not, the guess is considered invalid. If a guess is invalid, the front-end will deny the guess and prompt the user to enter their guess again.  
+
     async function isWord(input) {
         try {
             var data = await fetch("https://api.datamuse.com/words?sp=" + input);
@@ -152,6 +155,7 @@ The checkWord() function uses the Datamuse API to check whether the word exists 
 
 #### Checking For Letters That Are In The Correct Position
 checkWord() calls the checkPositions() function to return the correctPositions array. The function essentially iterates through every letter in both the user's guess and the correctWord, checking if there are any letters that match at the same index. If so, it is appended to the correctPositions array. Once it is done, it returns the array. It is possible for the array to be empty if there are no letters that are correct.  
+
     function checkPositions(inputArray, currentArray) {
         let i = 0
         let correctPositions = [];
@@ -167,6 +171,7 @@ checkWord() calls the checkPositions() function to return the correctPositions a
 #### Checking For Letters That Are In The Word But Wrong Position
 After calling checkPositions(), checkWord() calls the checkLetters() function to return the correctLetters and incorrectLetters arrays. The checkLetters() function starts by going through the correctWord and the user's guess and marking all the letters that we know are already correct as "null". This way, we will not accidentally append the same letters in the correctPositions array into the correctLetters array.  
 It then checks which letters are in the word by checking whether each letter is in correctWord. If it is in correctWord, we mark the letter in correctWord as null and append this index to the correctLetters array. This is due to special cases where the same letter can appear multiple times. For example, "robot" has 2 O's. If a user enters a word with 3 O's, the first 2 O's are considered a correct letter and the last O is considered incorrect. Therefore, we must mark them as null so that we do not accidentally double count the same letter. Once it has iterated through and checked every single letter in the user's guess, it returns the correctLetters and incorrectLetters array.  
+
     function checkLetters(inputArray, currentArray, correctPositions) {
         let correctLetters = [];
         let incorrectLetters = [];
@@ -200,6 +205,7 @@ It then checks which letters are in the word by checking whether each letter is 
 
 #### Checking For Letters That Are Not In The Word
 Within the checkLetters() function, as it is checking which letters are in the word, it is also checking which letters are not in the word. If the loop reaches the end of correctWord and cannot find a non-null match, the letter is considered incorrect and is then appended to the incorrectLetters list. The incorrectLetters array is returned alongside the correctLetters array.  
+
     function checkLetters(inputArray, currentArray, correctPositions) {
         let correctLetters = [];
         let incorrectLetters = [];
