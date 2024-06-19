@@ -1,6 +1,4 @@
 # Wordle
-You will create a `README.md` that describes how your game
-works and screenshots of the various user interface states.
 
 ## Game Components
 ### Getting Started
