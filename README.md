@@ -1,7 +1,7 @@
 # Wordle
 
 ## Design Document
-Refer to [Design Document](/docs/design_system.md) for an detailed design description of the game.
+Refer to [Design Document](/docs/design_system.md) for a detailed design description of the game.
 
 ## Game Components
 ### Getting Started
