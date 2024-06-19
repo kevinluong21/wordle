@@ -172,7 +172,7 @@ function buildGame() {
         document.body.replaceChild(tiles, oldTiles);
     }
     else {
-        document.body.appendChild(tiles);
+        document.body.insertBefore(tiles, document.getElementsByClassName("footer")[0]);
     }
 }
 
