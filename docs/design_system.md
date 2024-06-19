@@ -41,6 +41,45 @@ All of these components can be found in the [script.js](/script.js) file.
 
 ### The buildGame() Function
 At the beginning of each game, the gameboard needs to be cleared, especially if the user had just played a round. To make the process easier, the buildGame() function is used to re-generate all of the front-end components of the gameboard, so that everything is reset to its original state quickly and in a simple manner.
+    function buildGame() {
+        var oldTiles = document.getElementsByClassName("tiles")[0];
+        var tiles = document.createElement("table");
+        tiles.classList.add("tiles");
+
+        for (let i = 0; i < 6; i++) {
+            var row = document.createElement("tr");
+
+            for (let j = 0; j < 5; j++) {
+                var cell = document.createElement("td");
+                var tile = document.createElement("div");
+                var tileFront = document.createElement("div");
+                var tileBack = document.createElement("div");
+                var inputLetter = document.createElement("h1");
+                var displayLetter = document.createElement("h1");
+        
+                tile.classList.add("tile");
+                tileFront.classList.add("tile-front");
+                tileBack.classList.add("tile-back");
+                inputLetter.classList.add("input-letter");
+                displayLetter.classList.add("input-letter");
+        
+                tileFront.appendChild(inputLetter);
+                tileBack.appendChild(displayLetter);
+                tile.appendChild(tileFront);
+                tile.appendChild(tileBack);
+        
+                cell.appendChild(tile);
+                row.appendChild(cell);
+            }
+            tiles.appendChild(row);
+        }
+        if (oldTiles) {
+            document.body.replaceChild(tiles, oldTiles);
+        }
+        else {
+            document.body.insertBefore(tiles, document.getElementsByClassName("footer")[0]);
+        }
+    }
 
 ### The Keyboard Input
 This game relies on the user entering letters using their keyboard. To prevent the user from entering any unauthorized characters, a keydown event is used to restrict the user's input to letters, the Backspace, and the Space key. Every time a user presses on a key, the keydown event is triggered and it checks whether the key was a letter key (lowercase or capital), the Backspace, or the Enter key.  
@@ -51,26 +90,146 @@ Each round of the game runs on a Game module. The module is responsible for stor
 
 #### Starting A New Game
 The Game module is responsible for keeping track of every round and game. Once a user loads the page or hits "Play Again", a new Game module is created and the correctWord is initialized. correctWord is randomly assigned based on what 5-letter words are in the wordInventory instance variable of the module.
+    var game = Game();
+    game.start();
 
 #### Checking A Guess
 Once a user submits a guess, the checkWord() function is called. The function adds the guess to the array of guesses of that round, checks to see if the guess is a valid word using the isWord() function, and then it returns either a boolean or 3 arrays. If the word perfectly matches correctWord, the guess is considered a match and the function returns True to signal the end of the game. Otherwise, the function returns 3 arrays: correctPositions, correctLetters, and incorrectLetters:
 * correctPositions is an array of indices that indicate which letters are correct (letters are in correctWord and in the correct position). These letters will be indicated by a green tile in the front-end. 
 * correctLetters is an array of indices that indicate which letters are in correctWord, but in the wrong position. These letters are indicated by a yellow tile in the front-end.
 * incorrectLetters is an array of indices that indicate which letters are not in correctWord at all. These letters are indicated by a gray tile in the front-end.
+    game.checkWord = async function(input) {
+        input = input.toUpperCase();
+
+        //make sure the input is an actual word
+        let validWord = await isWord(input);
+        if (!validWord) {
+            return "Not a word";
+        }
+
+        //add guess to list
+        addGuess(input);
+        
+        //return true if the words are exactly the same
+        if (input == game.correctWord) {
+            return true;
+        }
+        
+        //if not the same, check which letters are in the correct position and/or in the word
+        //split the strings into letters
+        let inputArray = input.split("");
+        let current = game.correctWord.split("");
+        let correctPositions = []; //correct letter and position (marked as green)
+        let correctLetters = []; //letter is in word but wrong position (marked as yellow)
+        let incorrectLetters = []; //letter is not in word (marked as grey)
+
+        correctPositions = checkPositions(inputArray, current);
+
+        let temp = checkLetters(inputArray, current, correctPositions);
+        correctLetters = temp[0];
+        incorrectLetters = temp[1];
+
+        return [correctPositions, correctLetters, incorrectLetters];
+    }
 
 #### Checking The Validity Of A Guess
 The checkWord() function uses the Datamuse API to check whether the word exists in the English dictionary. The user's guess is passed in as an input and the function checks if the retrieved JSON file is empty or if the guess is in the JSON file. The Datamuse API will return an empty JSON file if there is no word or no similar word to the input. This means that the guess is invalid. Sometimes, the API may return words that it infers is what the word is supposed to be spelled, so the function will then check if the input is exactly in the JSON file. If not, the guess is considered invalid. If a guess is invalid, the front-end will deny the guess and prompt the user to enter their guess again.
+    async function isWord(input) {
+        try {
+            var data = await fetch("https://api.datamuse.com/words?sp=" + input);
+            var words = await data.json();
+
+            if (words.find(item => item.word == input.toLowerCase())) {
+                return true;
+            }
+            return false;
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
 ![Invalid Guess](/docs/assets/design_system/dialog_box_invalid_word.png)
 
 #### Checking For Letters That Are In The Correct Position
 checkWord() calls the checkPositions() function to return the correctPositions array. The function essentially iterates through every letter in both the user's guess and the correctWord, checking if there are any letters that match at the same index. If so, it is appended to the correctPositions array. Once it is done, it returns the array. It is possible for the array to be empty if there are no letters that are correct.
+    function checkPositions(inputArray, currentArray) {
+        let i = 0
+        let correctPositions = [];
+        while (i < game.wordLength) {
+            if (inputArray[i] == currentArray[i]) {
+                correctPositions.push(i);
+            }
+            i++;
+        }
+        return correctPositions;
+    }
 
 #### Checking For Letters That Are In The Word But Wrong Position
 After calling checkPositions(), checkWord() calls the checkLetters() function to return the correctLetters and incorrectLetters arrays. The checkLetters() function starts by going through the correctWord and the user's guess and marking all the letters that we know are already correct as "null". This way, we will not accidentally append the same letters in the correctPositions array into the correctLetters array.  
 It then checks which letters are in the word by checking whether each letter is in correctWord. If it is in correctWord, we mark the letter in correctWord as null and append this index to the correctLetters array. This is due to special cases where the same letter can appear multiple times. For example, "robot" has 2 O's. If a user enters a word with 3 O's, the first 2 O's are considered a correct letter and the last O is considered incorrect. Therefore, we must mark them as null so that we do not accidentally double count the same letter. Once it has iterated through and checked every single letter in the user's guess, it returns the correctLetters and incorrectLetters array.
+    function checkLetters(inputArray, currentArray, correctPositions) {
+        let correctLetters = [];
+        let incorrectLetters = [];
+        //set all the letters we know are correct to null
+        for (let i = 0; i < correctPositions.length; i++) {
+            currentArray[correctPositions[i]] = null;
+            inputArray[correctPositions[i]] = null;
+        }
+
+        //check if the letter is in the list. if it is, set the letter to null in current so that we don't double count.
+        for (let i = 0; i < inputArray.length; i++) {
+            let j = 0;
+            while (j < currentArray.length) {
+                //if no non-null match and about to reach end of array, then this letter from inputArray is nowhere to be found in currentArray
+                //therefore, it is incorrect
+                if (j == currentArray.length - 1 && inputArray[i] != currentArray[j] && inputArray[i] != null) {
+                    incorrectLetters.push(i);
+                }
+                //if there is a non-null match, then this letter is in the word, but in the wrong position
+                else if (inputArray[i] == currentArray[j] && inputArray[i] != null) {
+                    correctLetters.push(i);
+                    currentArray[j] = null;
+                    break;
+                }
+                j++;
+            }
+        }
+
+        return [correctLetters, incorrectLetters];
+    }
 
 #### Checking For Letters That Are Not In The Word
 Within the checkLetters() function, as it is checking which letters are in the word, it is also checking which letters are not in the word. If the loop reaches the end of correctWord and cannot find a non-null match, the letter is considered incorrect and is then appended to the incorrectLetters list. The incorrectLetters array is returned alongside the correctLetters array.
+    function checkLetters(inputArray, currentArray, correctPositions) {
+        let correctLetters = [];
+        let incorrectLetters = [];
+        //set all the letters we know are correct to null
+        for (let i = 0; i < correctPositions.length; i++) {
+            currentArray[correctPositions[i]] = null;
+            inputArray[correctPositions[i]] = null;
+        }
+
+        //check if the letter is in the list. if it is, set the letter to null in current so that we don't double count.
+        for (let i = 0; i < inputArray.length; i++) {
+            let j = 0;
+            while (j < currentArray.length) {
+                //if no non-null match and about to reach end of array, then this letter from inputArray is nowhere to be found in currentArray
+                //therefore, it is incorrect
+                if (j == currentArray.length - 1 && inputArray[i] != currentArray[j] && inputArray[i] != null) {
+                    incorrectLetters.push(i);
+                }
+                //if there is a non-null match, then this letter is in the word, but in the wrong position
+                else if (inputArray[i] == currentArray[j] && inputArray[i] != null) {
+                    correctLetters.push(i);
+                    currentArray[j] = null;
+                    break;
+                }
+                j++;
+            }
+        }
+
+        return [correctLetters, incorrectLetters];
+    }
 
 ### Calculating Results
 Once the user presses the Enter key, the guess is submitted to the Game module to return the results. If the result is True, then the guess is a perfect match. The game then ends. Otherwise, the script will colour the backgrounds of the tiles using DOM to be green if the letter in the guess is in the correct position, yellow if the letter is in the word but in the wrong position, and gray if the letter is incorrect. Once the round ends, the current Game object is appended to an array, games, which is used to track the user's past games.
