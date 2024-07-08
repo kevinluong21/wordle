@@ -1,3 +1,19 @@
+<?php 
+
+require "models/Game.php";
+
+session_start();
+
+use Wordle\Game;
+
+$_SESSION["games"] = []; //stores a list of games that have been played
+$_SESSION["game"] = new Game();
+$_SESSION["gameOver"] = false;
+$_SESSION["attempts"] = 0; //the row/word that the user is currently on
+$_SESSION["letter"] = 0; //the letter that the user is entering
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
