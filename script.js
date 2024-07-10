@@ -9,8 +9,8 @@ var tiles;
 var tileFronts;
 var tileBacks;
 var endingScreen = document.getElementsByClassName("popup-bg")[0];
-var inputLetters = [];
-var displayLetters = [];
+var inputLetters;
+var displayLetters;
 
 //build the game board before the start of each game
 //this way, the board can be quickly cleared when a new game is started
@@ -65,9 +65,8 @@ function keypress(key) {
                 var letter = response["letter"] - 1;
                 var bufferFull = response["bufferFull"];
 
-                console.log(response);
-
                 if (!bufferFull && attempts <= 6) {
+                    console.log(key);
                     tiles[((attempts - 1) * 5) + letter].style.border = "2px #a3a3a3 solid";
                     tableCells[((attempts - 1) * 5) + letter].classList.add("popout");
                     inputLetters[((attempts - 1) * 5) + letter].innerHTML = key.toUpperCase();
@@ -301,125 +300,13 @@ function hide(message) {
     document.getElementById(message).style.display = 'none'
 }
 
-
-// //used to update the page whenever there is a change in the server (fetch from the server)
-// function update() { //callback allows us to pass a function as an argument
-//     var xhttp = new XMLHttpRequest();
-//     xhttp.onreadystatechange = function() {
-//         if (this.readyState == 4 && this.status == 200) {
-//             try {
-//                 var response = JSON.parse(this.responseText);
-//                 var games = response["games"];
-//                 var result = response["result"];
-//                 var attempts = response["attempts"];
-//                 var gameOver = response["gameOver"];
-//                 var correctWord = response["correctWord"];
-
-//                 console.log(response);
-    
-//                 //word does not exist (error)
-//                 //if it encounters an error, it will not allow the user to go to the next attempt
-//                 if (result == "Not a word") {
-//                     dialog.classList.add("fade");
-//                     message.innerHTML = "Not a word. Try again.";
-//                     //once the animation ends, remove the class so that the animation can play again on the next iteration
-//                     setTimeout(function() {
-//                         dialog.classList.remove("fade");
-//                     }, 2500);
-//                 }
-//                 //guessed word is correct (game ends)
-//                 else if (result == true) {
-//                     for (let i = 0; i < 5; i++) {
-//                         (function(i) {
-//                             var tileToAnimate = tiles[((attempts - 1) * 5) + i];
-//                             setTimeout(function() {
-//                                 tileToAnimate.classList.add("reveal-letter");
-//                             }, i * 500);
-//                         })(i);
-                        
-//                         tileBacks[((attempts - 1) * 5) + i].style.backgroundColor = "#40c74b";
-//                         displayLetters[((attempts - 1) * 5) + i].style.color = "white";
-//                     }
-//                     setTimeout(function() { //wait for the characters to be revealed (wait for animation to complete) and 
-//                         //then display the message
-//                         dialog.classList.add("fade");
-//                         message.innerHTML = "Great job!";
-//                         //once the animation ends, remove the class so that the animation can play again on the next iteration
-//                         //and display the ending screen
-//                         setTimeout(function() {
-//                             dialog.classList.remove("fade");
-//                             endingPopup("win");
-//                         }, 2500);
-//                     }, 2500);
-    
-//                     window.removeEventListener("keydown", keydownHandler); //remove keydown event so that when startGame is called
-//                     //again, a new event listener is added
-//                 }
-//                 //a list of correct positions and letters, and incorrect letters was returned
-//                 else if (result.length == 3) {
-//                     let correctPositions = result[0];
-//                     let correctLetters = result[1];
-//                     let incorrectLetters = result[2];
-    
-//                     var colours = new Array(5);
-    
-//                     for (let i = 0; i < correctLetters.length; i++) {
-//                         colours[correctLetters[i]] = "#dee607";
-//                     }
-    
-//                     for (let i = 0; i < incorrectLetters.length; i++) {
-//                         colours[incorrectLetters[i]] = "grey";
-//                     }
-    
-//                     for (let i = 0; i < correctPositions.length; i++) {
-//                         colours[correctPositions[i]] = "#40c74b";
-//                     }
-    
-//                     for (let i = 0; i < colours.length; i++) {
-//                         (function(i) {
-//                             var tileToAnimate = tiles[((attempts - 1) * 5) + i];
-//                             setTimeout(function() {
-//                                 tileToAnimate.classList.add("reveal-letter");
-//                             }, i * 500);
-//                         })(i);
-    
-//                         tileBacks[((attempts - 1) * 5) + i].style.backgroundColor = colours[i];
-//                         displayLetters[((attempts - 1) * 5) + i].style.color = "white";
-//                     }
-    
-//                     //if the user uses up all 6 attempts, the game ends (the user loses)
-//                     if (gameOver) {
-//                         setTimeout(function() { //wait for the characters to be revealed (wait for animation to complete) and 
-//                             //then display the message
-//                             dialog.classList.add("fade");
-//                             message.innerHTML = "The correct word is: " + correctWord;
-//                             //once the animation ends, remove the class so that the animation can play again on the next iteration
-//                             //and display the ending screen
-//                             setTimeout(function() {
-//                                 dialog.classList.remove("fade");
-//                                 endingPopup("loss");
-//                             }, 2500);
-//                         }, 2500);
-    
-//                         window.removeEventListener("keydown", keydownHandler); //remove keydown event so that when startGame is called
-//                         //again, a new event listener is added
-//                     }
-//                     letter = 0;
-//                     guess = [];
-//                 }
-//             }
-//             catch (error) {
-//                 console.log("Ran into an error while updating:", error);
-//             }
-//         }
-//     }
-
-//     xhttp.open("POST", "models/Session.php", true);
-//     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//     xhttp.send("action=getStatus");
-// }
-
 function startGame() {
+    //request to reset the game
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "models/Session.php", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("action=resetGame");
+
     buildGame(); //build the game board at the start of each game
 
     table = document.getElementsByClassName("tiles")[0];
@@ -427,6 +314,8 @@ function startGame() {
     tiles = document.getElementsByClassName("tile");
     tileFronts = document.getElementsByClassName("tile-front");
     tileBacks = document.getElementsByClassName("tile-back");
+    inputLetters = [];
+    displayLetters = [];
 
     //disable the ending screen once starting a new game
     hide("endingScreen");

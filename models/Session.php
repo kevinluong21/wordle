@@ -4,6 +4,8 @@ require "Game.php";
 
 session_start();
 
+use Wordle\Game;
+
 //Datamuse API is used to check whether the input is an actual word.
 //The API can be found at https://www.datamuse.com/api/
 function isWord($guess) {
@@ -45,6 +47,18 @@ function displayGames() {
 }
 
 $response = [];
+
+if (isset($_POST["action"]) && $_POST["action"] == "resetGame") {
+    $_SESSION["game"] = new Game();
+    $_SESSION["gameOver"] = false;
+    $_SESSION["guess"] = []; //the user's current guess
+    $_SESSION["attempts"] = 1; //the row/word that the user is currently on
+    $_SESSION["letter"] = 0; //the current letter that the user is entering
+    $_SESSION["result"] = null;
+    $_SESSION["correctWord"] = "";
+    $_SESSION["bufferFull"] = false; //indicates whether the user can still enter keys
+    $_SESSION["bufferEmpty"] = true; //indicates whether the user has not entered any keys
+}
 
 if (isset($_POST["action"]) && isset($_POST["key"]) && $_POST["action"] == "keypress") {
     $guess = $_SESSION["guess"];
