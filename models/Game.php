@@ -1,6 +1,11 @@
 <?php 
 
+//This uses the Random Word API to generate random 5-letter words
+//https://random-word-api.herokuapp.com/home
+
 namespace Wordle;
+
+use Exception;
 
 class Game {
     private $attempts;
@@ -8,14 +13,29 @@ class Game {
     private $wordInventory;
     private $guesses;
     private const WORD_LENGTH = 5;
+    private const NUM_WORDS = 10;
 
     public function __construct() {
         $this->attempts = 0;
-        $this->wordInventory = ["Happy", "Plain", "Angry"];
+        $this->wordInventory = $this->generateWords();
         $this->guesses = [];
 
         $this->correctWord = $this->wordInventory[rand(0, count($this->wordInventory) - 1)];
         $this->correctWord =  strtoupper($this->correctWord);
+    }
+
+    private function generateWords() {
+        $url = "https://random-word-api.herokuapp.com/word?number=" . (string) self::NUM_WORDS . "&&length=" 
+        . (string) self::WORD_LENGTH;
+        $words = file_get_contents($url);
+
+        if ($words) { 
+            $words = json_decode($words);
+            return $words;
+        }
+        else { //false on failure
+            throw new Exception("The Random Word Generator API ran into an error.");
+        }
     }
 
     public function getCorrectWord() {
