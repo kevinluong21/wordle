@@ -38,9 +38,10 @@ $response = [];
 if (isset($_POST["action"]) && isset($_POST["key"]) && $_POST["action"] == "keypress") {
     $guess = $_SESSION["guess"];
     $attempts = $_SESSION["attempts"];
+    $gameOver = $_SESSION["gameOver"];
     $key = $_POST["key"];
 
-    if (count($guess) < 5 && $attempts < 6) {
+    if (count($guess) < 5 && !$gameOver) {
         $guess[] = strtoupper($key);
         $_SESSION["guess"] = $guess;
         $_SESSION["bufferEmpty"] = false;
@@ -85,20 +86,28 @@ if (isset($_POST["action"]) && $_POST["action"] == "backspace") {
 if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
     $guess = join("", $_SESSION["guess"]);
     $game = $_SESSION["game"];
-    $attempts = $_SESSION["attempts"];
+
+    if ($_SESSION["attempts"] >= 6) {
+        $_SESSION["gameOver"] = true;
+        $_SESSION["game"]->setAttempts($_SESSION["attempts"]); //set the score for this round
+        $_SESSION["games"][] = $_SESSION["game"]; //push current game to the list of games
+        $_SESSION["correctWord"] = $game->getCorrectWord();
+        $_SESSION["attempts"] = 6;
+    }
 
     if (strlen($guess) != 5) {
-        $reponse["result"] = "Guess must be 5 characters.";
+        $_SESSION["result"] = "Guess must be 5 characters.";
     }
     else if (!isWord($guess)) {
-        $response["result"] = "Not a word";
+        $_SESSION["result"] = "Not a word";
     }
     else {
         $result = $game->checkWord($guess);
+        $_SESSION["attempts"]++;
         
         if ($result === true) {
             $_SESSION["gameOver"] = true;
-            $_SESSION["game"]->setAttempts($_SESSION["attempts"] + 1); //set the score for this round
+            $_SESSION["game"]->setAttempts($_SESSION["attempts"]); //set the score for this round
             $_SESSION["games"][] = $_SESSION["game"]; //push current game to the list of games
         }
         else {
@@ -106,26 +115,17 @@ if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
             $correctLetters = $result[1];
             $incorrectLetters = $result[2];
 
-            if ($attempts < 6) {
-                $attempts++;
-                $_SESSION["attempts"] = $attempts;
-            }
-            else {
-                $_SESSION["gameOver"] = true;
-                $_SESSION["game"]->setAttempts($_SESSION["attempts"] + 1); //set the score for this round
-                $_SESSION["games"][] = $_SESSION["game"]; //push current game to the list of games
-            }
-
             $_SESSION["letter"] = 0; //reset for the next guess
             $_SESSION["guess"] = []; //reset for the next guess
         }
 
-        $response["result"] = $result;
+        $_SESSION["result"] = $result;
     }
 
     $response["attempts"] = $_SESSION["attempts"];
     $response["gameOver"] = $_SESSION["gameOver"];
     $response["correctWord"] = $_SESSION["correctWord"];
+    $response["result"] = $_SESSION["result"];
 }
 
 echo json_encode($response);

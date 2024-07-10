@@ -119,6 +119,7 @@ function submitGuess() {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             try {
+                console.log(this.responseText);
                 var response = JSON.parse(this.responseText);
                 var guess = response["guess"];
                 var result = response["result"];
@@ -215,8 +216,6 @@ function submitGuess() {
                         window.removeEventListener("keydown", keydownHandler); //remove keydown event so that when startGame is called
                         //again, a new event listener is added
                     }
-                    letter = 0;
-                    guess = [];
                 }
             }
             catch (error) {
