@@ -66,7 +66,6 @@ function keypress(key) {
                 var bufferFull = response["bufferFull"];
 
                 if (!bufferFull && attempts <= 6) {
-                    console.log(key);
                     tiles[((attempts - 1) * 5) + letter].style.border = "2px #a3a3a3 solid";
                     tableCells[((attempts - 1) * 5) + letter].classList.add("popout");
                     inputLetters[((attempts - 1) * 5) + letter].innerHTML = key.toUpperCase();
@@ -94,8 +93,6 @@ function backspace() {
                 var letter = response["letter"];
                 var bufferEmpty = response["bufferEmpty"];
 
-                console.log(response);
-
                 if (!bufferEmpty && !gameOver) {
                     tiles[((attempts - 1) * 5) + letter].style.border = "1px #d1d1d1 solid";
                     tableCells[((attempts - 1) * 5) + letter].classList.remove("popout");
@@ -118,7 +115,6 @@ function submitGuess() {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             try {
-                console.log(this.responseText);
                 var response = JSON.parse(this.responseText);
                 var games = response["games"];
                 var guess = response["guess"];

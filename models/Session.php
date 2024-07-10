@@ -112,14 +112,6 @@ if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
     $guess = join("", $_SESSION["guess"]);
     $game = $_SESSION["game"];
 
-    if ($_SESSION["attempts"] >= 6) {
-        $_SESSION["gameOver"] = true;
-        $_SESSION["game"]->setAttempts($_SESSION["attempts"]); //set the score for this round
-        $_SESSION["games"][] = $_SESSION["game"]; //push current game to the list of games
-        $_SESSION["correctWord"] = $game->getCorrectWord();
-        $_SESSION["attempts"] = 6;
-    }
-
     if (strlen($guess) != 5) {
         $_SESSION["result"] = "Guess must be 5 characters.";
     }
@@ -132,13 +124,20 @@ if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
         
         if ($result === true) {
             $_SESSION["gameOver"] = true;
-            $_SESSION["game"]->setAttempts($_SESSION["attempts"]); //set the score for this round
+            $_SESSION["game"]->setAttempts($_SESSION["attempts"] - 1); //set the score for this round
             $_SESSION["games"][] = $_SESSION["game"]; //push current game to the list of games
         }
         else {
             $correctPositions = $result[0];
             $correctLetters = $result[1];
             $incorrectLetters = $result[2];
+
+            if ($_SESSION["attempts"] > 6) {
+                $_SESSION["gameOver"] = true;
+                $_SESSION["game"]->setAttempts($_SESSION["attempts"]); //set the score for this round
+                $_SESSION["games"][] = $_SESSION["game"]; //push current game to the list of games
+                $_SESSION["correctWord"] = $game->getCorrectWord();
+            }
 
             $_SESSION["letter"] = 0; //reset for the next guess
             $_SESSION["guess"] = []; //reset for the next guess
