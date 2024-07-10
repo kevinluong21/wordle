@@ -14,7 +14,7 @@ class Game {
         $this->wordInventory = ["Happy", "Plain", "Angry"];
         $this->guesses = [];
 
-        $this->correctWord = $this->wordInventory[rand(0, count($this->wordInventory))];
+        $this->correctWord = $this->wordInventory[rand(0, count($this->wordInventory) - 1)];
         $this->correctWord =  strtoupper($this->correctWord);
     }
 

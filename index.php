@@ -9,8 +9,11 @@ use Wordle\Game;
 $_SESSION["games"] = []; //stores a list of games that have been played
 $_SESSION["game"] = new Game();
 $_SESSION["gameOver"] = false;
-$_SESSION["attempts"] = 0; //the row/word that the user is currently on
-$_SESSION["letter"] = 0; //the letter that the user is entering
+$_SESSION["guess"] = []; //the user's current guess
+$_SESSION["attempts"] = 1; //the row/word that the user is currently on
+$_SESSION["letter"] = 0; //the current letter that the user is entering
+$_SESSION["result"] = null;
+$_SESSION["correctWord"] = "";
 
 ?>
 
@@ -64,6 +67,6 @@ $_SESSION["letter"] = 0; //the letter that the user is entering
     </div>
 
     <div class="footer">© 2024 JK (JESSICA + KEVIN).</div>
-    <script src="script.js"></script>
+    <script src="script.js" type="text/javascript"></script>
 </body>
 </html>
