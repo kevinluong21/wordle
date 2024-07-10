@@ -121,6 +121,7 @@ function submitGuess() {
             try {
                 console.log(this.responseText);
                 var response = JSON.parse(this.responseText);
+                var games = response["games"];
                 var guess = response["guess"];
                 var result = response["result"];
                 var attempts = response["attempts"] - 1;
@@ -160,7 +161,7 @@ function submitGuess() {
                         //and display the ending screen
                         setTimeout(function() {
                             dialog.classList.remove("fade");
-                            endingPopup("win");
+                            endingPopup("win", games);
                         }, 2500);
                     }, 2500);
     
@@ -209,7 +210,7 @@ function submitGuess() {
                             //and display the ending screen
                             setTimeout(function() {
                                 dialog.classList.remove("fade");
-                                endingPopup("loss");
+                                endingPopup("loss", games);
                             }, 2500);
                         }, 2500);
     
@@ -244,7 +245,7 @@ function keydownHandler(event) {
 }
 
 //build a table of all the rounds that the user has played
-function displayAllGames() {
+function displayAllGames(games) {
     var popup = document.getElementsByClassName("popup")[0];
     var gamesTable = document.createElement("table");
     gamesTable.classList.add("games-table");
@@ -256,14 +257,14 @@ function displayAllGames() {
         rowNum.innerHTML = i + 1;
 
         var correctWord = document.createElement("td");
-        correctWord.innerHTML = games[i].getCorrectWord();
+        correctWord.innerHTML = games[i][1];
 
         var result = document.createElement("td");
-        if (games[i].getAttempts() == 7) {
+        if (games[i][0] == 7) {
             result.innerHTML = "Loss";
         }
         else {
-            result.innerHTML = "Won in " + games[i].getAttempts() + " guesses";
+            result.innerHTML = "Won in " + games[i][0] + " guesses";
         }
 
         row.appendChild(rowNum);
@@ -275,7 +276,7 @@ function displayAllGames() {
     }
 }
 
-function endingPopup(result) {
+function endingPopup(result, games) {
     var popupTitle = document.getElementsByClassName("popup-title")[0];
 
     show("endingScreen");
@@ -287,7 +288,7 @@ function endingPopup(result) {
         popupTitle.innerHTML = "Better luck next time!";
     }
     
-    displayAllGames();
+    displayAllGames(games);
 }
 
 // When user clicks on button, show message

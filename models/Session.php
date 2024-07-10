@@ -33,6 +33,17 @@ if (!isset($_SESSION["game"])) {
     //make sure to add error message
 }
 
+function displayGames() {
+    $toReturn = [];
+    $games = $_SESSION["games"];
+
+    foreach ($games as $game) {
+        $toReturn[] = [$game->getAttempts(), $game->getCorrectWord()];
+    }
+
+    return $toReturn;
+}
+
 $response = [];
 
 if (isset($_POST["action"]) && isset($_POST["key"]) && $_POST["action"] == "keypress") {
@@ -122,6 +133,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
         $_SESSION["result"] = $result;
     }
 
+    $response["games"] = displayGames();
     $response["attempts"] = $_SESSION["attempts"];
     $response["gameOver"] = $_SESSION["gameOver"];
     $response["correctWord"] = $_SESSION["correctWord"];
