@@ -61,13 +61,13 @@ function keypress(key) {
             try {
                 console.log(this.responseText);
                 var response = JSON.parse(this.responseText);
-                var guess =  response["guess"];
                 var attempts = response["attempts"];
                 var letter = response["letter"] - 1;
+                var bufferFull = response["bufferFull"];
 
                 console.log(response);
 
-                if (guess.length <= 5 && attempts <= 6) {
+                if (!bufferFull && attempts <= 6) {
                     tiles[((attempts - 1) * 5) + letter].style.border = "2px #a3a3a3 solid";
                     tableCells[((attempts - 1) * 5) + letter].classList.add("popout");
                     inputLetters[((attempts - 1) * 5) + letter].innerHTML = key.toUpperCase();
@@ -90,14 +90,14 @@ function backspace() {
         if (this.readyState == 4 && this.status == 200) {
             try {
                 var response = JSON.parse(this.responseText);
-                var guess = response["guess"];
                 var attempts = response["attempts"];
                 var gameOver = response["gameOver"];
-                var letter = response["letter"] - 1;
+                var letter = response["letter"];
+                var bufferEmpty = response["bufferEmpty"];
 
                 console.log(response);
 
-                if (guess.length > 0 && !gameOver) {
+                if (!bufferEmpty && !gameOver) {
                     tiles[((attempts - 1) * 5) + letter].style.border = "1px #d1d1d1 solid";
                     tableCells[((attempts - 1) * 5) + letter].classList.remove("popout");
                     inputLetters[((attempts - 1) * 5) + letter].innerHTML = "";
@@ -114,14 +114,15 @@ function backspace() {
     xhttp.send("action=backspace");
 }
 
-function submitGuess(guess) {
+function submitGuess() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             try {
                 var response = JSON.parse(this.responseText);
+                var guess = response["guess"];
                 var result = response["result"];
-                var attempts = response["attempts"];
+                var attempts = response["attempts"] - 1;
                 var gameOver = response["gameOver"];
                 var correctWord = response["correctWord"];
 
@@ -225,7 +226,7 @@ function submitGuess(guess) {
     }
     xhttp.open("POST", "models/Session.php", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("action=submitGuess&guess=" + String(guess));
+    xhttp.send("action=submitGuess");
 }
 
 function keydownHandler(event) {
@@ -238,8 +239,8 @@ function keydownHandler(event) {
     else if (event.key == "Backspace") {
         backspace();
     }
-    else if (event.key == "Enter" && guess.length == 5) {
-        submitGuess(guess.join(""));
+    else if (event.key == "Enter") {
+        submitGuess();
     }
 }
 

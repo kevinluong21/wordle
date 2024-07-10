@@ -13,7 +13,11 @@ function isWord($guess) {
     if ($words) { 
         $words = json_decode($words);
 
-        if (array_search(strtolower($guess), $words)) { //if guess is found in the list of words, then it is valid
+        $matches = array_filter($words, function($item) use ($guess) {
+            return $item->word == strtolower($guess);
+        });
+
+        if ($matches) { //if guess is found in the list of words, then it is valid
             return true;
         }
         else {
@@ -39,37 +43,54 @@ if (isset($_POST["action"]) && isset($_POST["key"]) && $_POST["action"] == "keyp
     if (count($guess) < 5 && $attempts < 6) {
         $guess[] = strtoupper($key);
         $_SESSION["guess"] = $guess;
-        $_SESSION["letter"]++;
+        $_SESSION["bufferEmpty"] = false;
     }
 
-    $response["guess"] = $_SESSION["guess"];
+    $_SESSION["letter"]++; //counts the number of keys that were entered
+
+    if ($_SESSION["letter"] > 5) { //if more than 5 keys were pressed, then set the buffer to full and set the count back to 5
+        //this prevents users from changing the last letter
+        $_SESSION["bufferFull"] = true;
+        $_SESSION["letter"] = 5;
+    }
+
     $response["attempts"] = $_SESSION["attempts"];
     $response["letter"] = $_SESSION["letter"];
+    $response["bufferFull"] = $_SESSION["bufferFull"];
 }
 
-if (isset($_POST["action"]) && isset($_POST["key"]) && $_POST["action"] == "backspace") {
+if (isset($_POST["action"]) && $_POST["action"] == "backspace") {
     $guess = $_SESSION["guess"];
     $gameOver = $_SESSION["gameOver"];
-    $key = $_POST["key"];
 
     if (count($guess) > 0 && !$gameOver) {
-        $_SESSION["letter"]--;
         array_pop($guess);
         $_SESSION["guess"] = $guess;
+        $_SESSION["bufferFull"] = false;
     }
 
-    $response["guess"] = $_SESSION["guess"];
+    $_SESSION["letter"]--;
+
+    if ($_SESSION["letter"] < 0) { //if backspace is pressed more than 5 times, set the buffer to empty and set the letter back to 0
+        $_SESSION["bufferEmpty"] = true;
+        $_SESSION["letter"] = 0;
+    }
+
     $response["attempts"] = $_SESSION["attempts"];
     $response["gameOver"] = $_SESSION["gameOver"];
     $response["letter"] = $_SESSION["letter"];
+    $response["bufferEmpty"] = $_SESSION["bufferEmpty"];
 }
 
-if (isset($_POST["action"]) && isset($_POST["guess"]) && $_SESSION["action"] == "submitGuess") {
-    $guess = $_POST["guess"];
+if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
+    $guess = join("", $_SESSION["guess"]);
     $game = $_SESSION["game"];
     $attempts = $_SESSION["attempts"];
 
-    if (!isWord($guess)) {
+    if (strlen($guess) != 5) {
+        $reponse["result"] = "Guess must be 5 characters.";
+    }
+    else if (!isWord($guess)) {
         $response["result"] = "Not a word";
     }
     else {

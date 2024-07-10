@@ -14,6 +14,8 @@ $_SESSION["attempts"] = 1; //the row/word that the user is currently on
 $_SESSION["letter"] = 0; //the current letter that the user is entering
 $_SESSION["result"] = null;
 $_SESSION["correctWord"] = "";
+$_SESSION["bufferFull"] = false; //indicates whether the user can still enter keys
+$_SESSION["bufferEmpty"] = true; //indicates whether the user has not entered any keys
 
 ?>
 
