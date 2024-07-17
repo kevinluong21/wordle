@@ -154,4 +154,3 @@ if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
 }
 
 echo json_encode($response);
-?>

@@ -130,5 +130,3 @@ class Game {
         return [$correctPositions, $correctLetters, $incorrectLetters];
     }
 }
-
-?>
