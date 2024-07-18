@@ -7,7 +7,9 @@ Refer to [Design Document](/docs/design_system.md) for a detailed design descrip
 ### Getting Started
 To play Wordle, follow these steps:
 1. Clone the repository: git clone https://github.com/kevinluong21/wordle.git
-2. Open index.php in your web browser
+2. In the Wordle directory in your terminal
+3. In the terminal, enter the following command: php -S localhost:8000
+2. Open [localhost:8000](<http://localhost:8000)>) in your web browser
 3. Start guessing words and have fun!
 
 ### Gameplay
