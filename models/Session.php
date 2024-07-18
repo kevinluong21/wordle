@@ -27,12 +27,14 @@ function isWord($guess) {
         }
     }
     else { //false on failure
-        throw new Exception("The Datamuse API ran into an error.");
+        //if there's an API failure, simply accept the guess
+        //the player may waste turns if they have a spelling mistake but it will avoid crashes if the API does not work
+        return true;
     }
 }
 
 if (!isset($_SESSION["game"])) {
-    //make sure to add error message
+    $response["error"] = "Error loading game. Please try again.";
 }
 
 function displayGames() {

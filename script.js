@@ -65,6 +65,15 @@ function keypress(key) {
                 var letter = response["letter"] - 1;
                 var bufferFull = response["bufferFull"];
 
+                if (response["error"]) { //if there is an error, display the message
+                    dialog.classList.add("fade");
+                    message.innerHTML = response["error"];
+                    //once the animation ends, remove the class so that the animation can play again on the next iteration
+                    setTimeout(function() {
+                        dialog.classList.remove("fade");
+                    }, 2500);
+                }
+
                 if (!bufferFull && attempts <= 6) {
                     tiles[((attempts - 1) * 5) + letter].style.border = "2px #a3a3a3 solid";
                     tableCells[((attempts - 1) * 5) + letter].classList.add("popout");
