@@ -10,9 +10,18 @@ use Wordle\Game;
 //The API can be found at https://www.datamuse.com/api/
 function isWord($guess) {
     $url = "https://api.datamuse.com/words?sp=" . $guess;
-    $words = file_get_contents($url);
 
-    if ($words) { 
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    $words = curl_exec($curl);
+
+
+    // $words = file_get_contents($url);
+
+    if (!curl_errno($curl) && $words) { 
+        curl_close($curl);
         $words = json_decode($words);
 
         $matches = array_filter($words, function($item) use ($guess) {
@@ -29,6 +38,7 @@ function isWord($guess) {
     else { //false on failure
         //if there's an API failure, simply accept the guess
         //the player may waste turns if they have a spelling mistake but it will avoid crashes if the API does not work
+        curl_close($curl);
         return true;
     }
 }
