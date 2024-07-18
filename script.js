@@ -124,6 +124,7 @@ function submitGuess() {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             try {
+                console.log(this.responseText);
                 var response = JSON.parse(this.responseText);
                 var games = response["games"];
                 var guess = response["guess"];
