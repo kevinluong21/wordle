@@ -292,3 +292,44 @@ Once the user presses the Enter key, the guess is submitted to the submitGuess b
 
 ### Tracking The Scores
 Since each round is a separate Game object, the script is able to store the number of attempts and the correct word in the array, games. It then uses the displayAllGames() function to build a table that reads the number of attempts that were made in each round and the correct word and displays it as statistics to the user. The user can view their statistics either by clicking on bar graph symbol in the header or it is automatically displayed to the user at the end of each game.  
+```php
+function displayAllGames(games) {
+    var popup = document.getElementsByClassName("popup")[0];
+    var gamesTable = document.createElement("table");
+    gamesTable.classList.add("games-table");
+    var gamesLen = 10;
+
+    games.sort(function(a, b){return a[0] - b[0]}); //sort by score (lowest score is first)
+
+    if (games.length < 10) { //only display the top 10 scores
+        gamesLen = games.length;
+    }
+
+    games = games.slice(0, gamesLen); //take the top 10 scores (if less than 10, take all of them)
+
+    for (let i = 0; i < gamesLen; i++) {
+        var row = document.createElement("tr");
+
+        var rowNum = document.createElement("td");
+        rowNum.innerHTML = i + 1;
+
+        var correctWord = document.createElement("td");
+        correctWord.innerHTML = games[i][1];
+
+        var result = document.createElement("td");
+        if (games[i][0] == 7) {
+            result.innerHTML = "Loss";
+        }
+        else {
+            result.innerHTML = "Won in " + games[i][0] + " guesses";
+        }
+
+        row.appendChild(rowNum);
+        row.appendChild(correctWord);
+        row.appendChild(result);
+        gamesTable.appendChild(row);
+        
+        popup.replaceChild(gamesTable, popup.children[2]); //replace the original table with the new table
+    }
+}
+```
