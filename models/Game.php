@@ -18,7 +18,7 @@ class Game {
     public function __construct() {
         $this->attempts = 0;
         // $this->wordInventory = $this->generateWords(); //API takes too long to load
-        $this->wordInventory = ["hello","bingo","unify","argue","clock","drool","venus","coast","apnea","spacy"];
+        $this->wordInventory = ["hello","bingo","unify","argue","clock","drool","venus","coast","apnea","spicy"];
         $this->guesses = [];
 
         $this->correctWord = $this->wordInventory[rand(0, count($this->wordInventory) - 1)];

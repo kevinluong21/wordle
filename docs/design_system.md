@@ -19,8 +19,6 @@ The instructions for the Wordle game are designed to be accessible and informati
 ### Scoreboard
 The button to access the scoreboard in the game is indicated by a button with the bar graph symbol and located on the right-end of the header, positioned carefully to avoid disrupting a user's gameplay experience. The scoreboard provides players with real-time tracking of their progress, displaying key information such as a short message, their number of wins, and their respective winning word guesses. In addition, the scoreboard includes a button 'Play Again' to allow users to restart the game and play another run. The scoreboard will continue to track the scores of all games while the user is connected to the game. By integrating a scoreboard and an option to replay the game within the game, users can become more invested in the gameplay and their progress. Please refer to [Scoreboard Mockup](/docs/assets/design_system/scoreboard.html) for the scoreboard mockup.  
 ![Scoreboard For New Player](/docs/assets/design_system/statistics_lightbox_for_new_player.png)
-![Scoreboard When A Player Wins](/docs//assets/design_system/ending_statistics_screen.png)
-![Scoreboard When A Player Loses](/docs/assets/design_system/ending_statistics_screen_game_loss.png)
 ![Game Leaderboard showing your top 10 scores](assets/design_system/leaderboard.png)
 
 ### Footers
