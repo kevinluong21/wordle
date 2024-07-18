@@ -3,7 +3,11 @@
 ## Design Document
 Refer to [Design Document](/docs/design_system.md) for a detailed design description of the game.
 
+## Disclaimer
+This project connects to an API, and if the `php.ini` configurations are not set properly, it may encounter errors. Please ensure that your PHP environment is correctly configured to avoid potential issues.
+
 ## Game Components
+
 ### Getting Started
 To play Wordle, follow these steps:
 1. Clone the repository: git clone https://github.com/kevinluong21/wordle.git
