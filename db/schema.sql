@@ -4,7 +4,7 @@ CREATE TABLE Users (
     EmailAddress VARCHAR, 
     Password VARCHAR NOT NULL, 
     Country VARCHAR NOT NULL,
-    Role TEXT NOT NULL CHECK (Role IN ('Admin', 'Player')),
+    Role TEXT DEFAULT 'Player' CHECK (Role IN ('Admin', 'Player')), -- by default, unless specified is Player
     PRIMARY KEY (EmailAddress, Country));
 
 CREATE TABLE Scores (
