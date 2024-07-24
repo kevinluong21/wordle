@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     if($authentication){
         $_SESSION['username'] = $username; // Save username to session
-        header('Location: patient-display.php'); // redirect to patient-display
+        header('Location: patient-display.php'); // redirect to player display
         exit();
     }else{
         echo "Name or password not valid";    

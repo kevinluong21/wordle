@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $authentication = false;
 
     // execute query for user/password
-    $query = "SELECT * FROM users WHERE username = $1"; 
+    $query = "SELECT * FROM users WHERE username = $1 AND Role = 'Admin'"; 
     $result = pg_query_params($dbconnection, $query, array($username));
 
     $user = pg_fetch_object($result);
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     if($authentication){
         $_SESSION['username'] = $username; // Save username to session
-        header('Location: patient-display.php'); // redirect to patient-display
+        header('Location: admin-display.php'); // redirect to admin display
         exit();
     }else{
         echo "Name or password not valid";    
