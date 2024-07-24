@@ -29,6 +29,14 @@
                         </div>
                     </a>
                 </td>
+                <td>
+                    <a href="gameplay.php">
+                        <div class="option" id="guest">
+                            <h1>I'm a Guest</h1>
+                            <h4>Play &#8599;</h4>
+                        </div>
+                    </a>
+                </td>
             </tr>
         </table>
     </div>
