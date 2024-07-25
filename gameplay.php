@@ -24,7 +24,7 @@ $_SESSION["bufferEmpty"] = true; //indicates whether the user has not entered an
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="gameplay.css" rel="stylesheet" type="text/css">
     <link rel="icon" type="image/x-icon" href="/images/jk_logo.png">
     <title>Wordle by JK</title>
 </head>
@@ -69,6 +69,6 @@ $_SESSION["bufferEmpty"] = true; //indicates whether the user has not entered an
     </div>
 
     <div class="footer">© 2024 JK (JESSICA + KEVIN).</div>
-    <script src="script.js" type="text/javascript"></script>
+    <script src="gameplay.js" type="text/javascript"></script>
 </body>
 </html>

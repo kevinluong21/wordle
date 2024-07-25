@@ -3,42 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="index.css" rel="stylesheet" type="text/css">
     <link rel="icon" type="image/x-icon" href="/images/jk_logo.png">
     <title>Wordle by JK</title>
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Wordle</h1>
-        </h1>
-        <table class="login-options">
-            <tr>
-                <td>
-                    <a href="player_login.php">
-                        <div class="option" id="player">
-                            <h1>I'm a Player</h1>
-                            <h4>Login &#8599;</h4>
-                        </div>
-                    </a>
-                </td>
-                <td>
-                    <a href="admin_login.php">
-                        <div class="option" id="admin">
-                            <h1>I'm an Administrator</h1>
-                            <h4>Login &#8599;</h4>
-                        </div>
-                    </a>
-                </td>
-                <td>
-                    <a href="gameplay.php">
-                        <div class="option" id="guest">
-                            <h1>I'm a Guest</h1>
-                            <h4>Play &#8599;</h4>
-                        </div>
-                    </a>
-                </td>
-            </tr>
-        </table>
+        <div class="main">
+            <h1 class="title">Wordle</h1>
+            <h4 class="subtitle">Guess the 5-letter word in 6 tries or less.</h4>
+            <a href="gameplay.php">
+                <button class="button" id="play-as-guest">Play as Guest</button>
+            </a>
+            <button class="button" id="login" onclick='show("loginScreen")'>Login</button>
+        </div>
     </div>
+
+    <!-- login popup -->
+    <div class="popup-bg" id="loginScreen">
+        <div class="popup">
+            <div class="close-btn" onclick='hide("loginScreen")'>&#x2715;</div>
+            <h1 class="popup-title">Login</h1>
+            <form method="post">
+                <label for="email-address" class="subtitle">Email Address</label><br>
+                <input type="email" id="email-address" name="email-address" autocomplete="username" required class="text-input"><br>
+                <label for="password" class="subtitle">Password</label><br>
+                <input type="password" id="password" name="password" required class="text-input"><br>
+                <button type="submit" class="button">Login</button>
+
+                <h4 class="subtitle">Don't have an account? Sign up.</h4>
+            </form>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
 </body>
 </html>
