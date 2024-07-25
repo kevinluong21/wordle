@@ -1,3 +1,6 @@
+<?php 
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +15,29 @@
         <h1 class="title">Wordle</h1>
         </h1>
         <table class="admin-table">
-        </table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email Address</th>
+                    <th>Country</th>
+                    <th>Correct Word</th>
+                    <th>Number of Attempts</th>
+                </tr>
+            </thead>
+        <tbody>
+            <?php
+            while ($row = pg_fetch_assoc($scores)) {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['emailaddress']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['country']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['correctword']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['numattempts']) . "</td>";
+                echo "</tr>";
+            }
+            ?>
+        </tbody>
+    </table>
     </div>
 </body>
 </html>
