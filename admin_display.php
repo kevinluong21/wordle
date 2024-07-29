@@ -28,7 +28,7 @@ if (!$dbconnection) {
         <table class="admin-table">
             <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>ID</th>
                     <th>Email Address</th>
                     <th>Country</th>
                     <th>Correct Word</th>

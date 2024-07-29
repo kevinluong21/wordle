@@ -4,8 +4,6 @@ session_start();
 // database info
 $host = "localhost";
 $dbname = "wordle";
-// $dbuser = "dbuser";
-// $dbpassword = "dbpassword";
 
 $authentication = false;
 $response = [];
@@ -47,8 +45,8 @@ if ($user && $password == $user->password) {
 pg_free_result($result);
 
 if ($authentication) {
-    $_SESSION['username'] = $email; // Save username to session
-    // $response["username"] = $_SESSION["username"];
+    $_SESSION["emailAddress"] = $user->emailaddress; // Save email address to session
+    $_SESSION["country"] = $user->country; //save the user's country to session
 
     if ($user->role == "Admin") {
         $response["redirect"] = "/admin_display.php"; // redirect to admin display if admin

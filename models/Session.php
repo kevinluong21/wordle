@@ -6,6 +6,16 @@ session_start();
 
 use Wordle\Game;
 
+// database info
+$host = "localhost";
+$dbname = "wordle";
+
+// database connection
+$dbconnection = pg_connect("host=$host dbname=$dbname");
+if (!$dbconnection) {
+    die("Error in connection test: " . pg_last_error());
+}
+
 //Datamuse API is used to check whether the input is an actual word.
 //The API can be found at https://www.datamuse.com/api/
 function isWord($guess) {
@@ -56,6 +66,23 @@ function displayGames() {
     }
 
     return $toReturn;
+}
+
+function submitScore() {
+    global $dbconnection;
+
+    //submit score to database if user is logged in
+    if (isset($_SESSION["emailAddress"]) && isset($_SESSION["country"])) {
+        // add a new row to the scores relation
+        $query = "INSERT INTO Scores (EmailAddress, Country, CorrectWord, NumAttempts) VALUES ($1, $2, $3, $4)";
+        pg_query_params($dbconnection, $query, [$_SESSION["emailAddress"], $_SESSION["country"], $_SESSION["game"]->getCorrectWord(), $_SESSION["game"]->getAttempts()]);
+    }
+    //submit score as a guest if not logged in
+    else {
+        // add a new row to the scores relation
+        $query = "INSERT INTO Scores (EmailAddress, Country, CorrectWord, NumAttempts) VALUES ($1, $2, $3, $4)";
+        pg_query_params($dbconnection, $query, ["guest@wordle.com", "N/A", $_SESSION["game"]->getCorrectWord(), $_SESSION["game"]->getAttempts()]);
+    }
 }
 
 $response = [];
@@ -138,6 +165,8 @@ if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
             $_SESSION["gameOver"] = true;
             $_SESSION["game"]->setAttempts($_SESSION["attempts"] - 1); //set the score for this round
             $_SESSION["games"][] = $_SESSION["game"]; //push current game to the list of games
+
+            submitScore(); //submit score to database
         }
         else {
             $correctPositions = $result[0];
@@ -149,6 +178,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
                 $_SESSION["game"]->setAttempts($_SESSION["attempts"]); //set the score for this round
                 $_SESSION["games"][] = $_SESSION["game"]; //push current game to the list of games
                 $_SESSION["correctWord"] = $game->getCorrectWord();
+                submitScore(); //submit score to database
             }
 
             $_SESSION["letter"] = 0; //reset for the next guess
