@@ -14,3 +14,5 @@ CREATE TABLE Scores (
     CorrectWord VARCHAR, 
     NumAttempts INT, 
     FOREIGN KEY (EmailAddress, Country) REFERENCES Users(EmailAddress, Country));
+
+INSERT INTO Users (EmailAddress, Password, Country, Role) VALUES ('admin@wordle.com', 'hello123', 'Canada', 'Admin');

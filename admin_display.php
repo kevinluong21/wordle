@@ -1,5 +1,16 @@
 <?php 
 
+session_start();
+
+$host = "localhost";
+$dbname = "wordle";
+
+// database connection
+$dbconnection = pg_connect("host=$host dbname=$dbname");
+if (!$dbconnection) {
+    die("Error in connection test: " . pg_last_error());
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,6 +37,10 @@
             </thead>
         <tbody>
             <?php
+            // return the scores table
+            $query = "SELECT * FROM Scores";
+            $scores = pg_query($dbconnection, $query);
+
             while ($row = pg_fetch_assoc($scores)) {
                 echo "<tr>";
                 echo "<td>" . htmlspecialchars($row['id']) . "</td>";
