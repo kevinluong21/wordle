@@ -24,8 +24,7 @@ if (!$dbconnection) {
 <body>
     <div class="container">
         <h1 class="title">Wordle</h1>
-        </h1>
-        <table class="admin-table">
+        <table class="scores-table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -48,6 +47,33 @@ if (!$dbconnection) {
                 echo "<td>" . htmlspecialchars($row['country']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['correctword']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['numattempts']) . "</td>";
+                echo "</tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+
+    <table class="users-table">
+            <thead>
+                <tr>
+                    <th>Email Address</th>
+                    <th>Password</th>
+                    <th>Country</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+        <tbody>
+            <?php
+            // return the scores table
+            $query = "SELECT * FROM Users";
+            $users = pg_query($dbconnection, $query);
+
+            while ($row = pg_fetch_assoc($users)) {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($row['emailaddress']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['password']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['country']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['role']) . "</td>";
                 echo "</tr>";
             }
             ?>

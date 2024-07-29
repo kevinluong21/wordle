@@ -2,6 +2,11 @@
 session_start();
 ?>
 
+<!-- TODO: sessions are NOT cleared on refresh, so remember to make a logout!!! -->
+<!-- TODO: the admin should be able to add or delete users or scores -->
+<!-- TODO: add an extra tab to the leaderboard that allows users to see their scores compared with all other users in their country
+  or globally -->
+
 <!DOCTYPE html>
 <html lang="en">
 
