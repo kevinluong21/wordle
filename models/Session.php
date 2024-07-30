@@ -85,9 +85,7 @@ function submitScore() {
     }
 }
 
-$response = [];
-
-if (isset($_POST["action"]) && $_POST["action"] == "resetGame") {
+function resetGame() {
     $_SESSION["game"] = new Game();
     $_SESSION["gameOver"] = false;
     $_SESSION["guess"] = []; //the user's current guess
@@ -97,6 +95,22 @@ if (isset($_POST["action"]) && $_POST["action"] == "resetGame") {
     $_SESSION["correctWord"] = "";
     $_SESSION["bufferFull"] = false; //indicates whether the user can still enter keys
     $_SESSION["bufferEmpty"] = true; //indicates whether the user has not entered any keys
+}
+
+$response = [];
+
+if (isset($_POST["action"]) && $_POST["action"] == "logout") {
+    resetGame(); //reset game before logging out
+    $_SESSION["emailAddress"] = null; //reset the email address field
+    $_SESSION["country"] = null;
+}
+
+if (isset($_POST["action"]) && $_POST["action"] == "resetGame") {
+    resetGame();
+}
+
+if (isset($_POST["action"]) && $_POST["action"] == "getGames") {
+    $response["games"] = displayGames();
 }
 
 if (isset($_POST["action"]) && isset($_POST["key"]) && $_POST["action"] == "keypress") {

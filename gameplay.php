@@ -35,7 +35,7 @@ $_SESSION["bufferEmpty"] = true; //indicates whether the user has not entered an
             <div class="buttons">
                 <button class="helpButton" id="helpButton" onclick="show('helpPopup')">?</button>
                 <button class="helpButton" onclick="show('endingScreen')">&#x1F4CA;</button>
-                <button class="helpButton" a href="Logout.php">&#x21AA; Logout</button>
+                <button class="helpButton" onclick="logout()">&#x21AA; Logout</button>
             </div>
 
             <div class="helpPopup" id="helpPopup">

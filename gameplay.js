@@ -12,6 +12,15 @@ var endingScreen = document.getElementsByClassName("popup-bg")[0];
 var inputLetters;
 var displayLetters;
 
+function logout() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "models/Session.php", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("action=logout");
+
+    window.location.href = "index.php"; //redirect back to index page
+}
+
 //build the game board before the start of each game
 //this way, the board can be quickly cleared when a new game is started
 function buildGame() {
@@ -131,8 +140,6 @@ function submitGuess() {
                 var attempts = response["attempts"] - 1;
                 var gameOver = response["gameOver"];
                 var correctWord = response["correctWord"];
-
-                console.log(response);
     
                 //word does not exist (error)
                 //if it encounters an error, it will not allow the user to go to the next attempt
@@ -280,6 +287,35 @@ function displayAllGames(games) {
     }
 }
 
+//popup displayed before any game is played
+function startingPopup() {
+    var popupTitle = document.getElementsByClassName("popup-title")[0];
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            try {
+                console.log(this.responseText);
+                var response = JSON.parse(this.responseText);
+                var games = response["games"];
+
+                if (games.length == 0) {
+                    popupTitle.innerHTML = "Play a game to see your stats appear here!";
+                }
+                else {
+                    popupTitle.innerHTML = "Your Top Scores";
+                    displayAllGames(games);
+                }
+            }
+            catch (error) {
+                console.log("Error during keypress:", error);
+            }
+        }
+    }
+    xhttp.open("POST", "models/Session.php", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("action=getGames");
+}
+
 function endingPopup(result, games) {
     var popupTitle = document.getElementsByClassName("popup-title")[0];
 
@@ -338,3 +374,4 @@ function startGame() {
 
 //on load, execute the startGame() function
 window.addEventListener("load", startGame);
+window.addEventListener("load", startingPopup);

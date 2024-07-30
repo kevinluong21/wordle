@@ -1,3 +1,4 @@
+//login form submit
 var login = document.getElementById("login");
 
 login.addEventListener("submit", function(event) {

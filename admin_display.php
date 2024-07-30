@@ -42,6 +42,9 @@ $users = pg_query($dbconnection, $query);
 <body>
     <div class="menu">
         <h1 class="title">Wordle</h1>
+        <div class="helpButtons">
+            <button class="helpButton" onclick="logout()">&#x21AA; Logout</button>
+        </div>
     </div>
 
     <h1>Leaderboard By Correct Word</h1>
@@ -118,5 +121,7 @@ $users = pg_query($dbconnection, $query);
         ?>
     </tbody>
 </table>
+
+<script src="admin_display.js"></script>
 </body>
 </html>
