@@ -253,17 +253,8 @@ function displayAllGames(games) {
     var popup = document.getElementsByClassName("popup")[0];
     var gamesTable = document.createElement("table");
     gamesTable.classList.add("games-table");
-    var gamesLen = 10;
 
-    games.sort(function(a, b){return a[0] - b[0]}); //sort by score (lowest score is first)
-
-    if (games.length < 10) { //only display the top 10 scores
-        gamesLen = games.length;
-    }
-
-    games = games.slice(0, gamesLen); //take the top 10 scores (if less than 10, take all of them)
-
-    for (let i = 0; i < gamesLen; i++) {
+    for (let i = 0; i < games.length; i++) {
         var row = document.createElement("tr");
 
         var rowNum = document.createElement("td");

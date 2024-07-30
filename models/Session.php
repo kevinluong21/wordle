@@ -27,9 +27,6 @@ function isWord($guess) {
 
     $words = curl_exec($curl);
 
-
-    // $words = file_get_contents($url);
-
     if (!curl_errno($curl) && $words) { 
         curl_close($curl);
         $words = json_decode($words);
@@ -58,11 +55,14 @@ if (!isset($_SESSION["game"])) {
 }
 
 function displayGames() {
+    global $dbconnection;
     $toReturn = [];
-    $games = $_SESSION["games"];
 
-    foreach ($games as $game) {
-        $toReturn[] = [$game->getAttempts(), $game->getCorrectWord()];
+    $query = "SELECT NumAttempts, CorrectWord FROM Scores WHERE EmailAddress = $1 ORDER BY NumAttempts, CorrectWord ASC LIMIT 10";
+    $games = pg_query_params($dbconnection, $query, [$_SESSION["emailAddress"]]);
+
+    while ($game = pg_fetch_assoc($games)) {
+        $toReturn[] = [htmlspecialchars($game["numattempts"]), htmlspecialchars($game["correctword"])];
     }
 
     return $toReturn;
@@ -164,8 +164,6 @@ if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
         if ($result === true) {
             $_SESSION["gameOver"] = true;
             $_SESSION["game"]->setAttempts($_SESSION["attempts"] - 1); //set the score for this round
-            $_SESSION["games"][] = $_SESSION["game"]; //push current game to the list of games
-
             submitScore(); //submit score to database
         }
         else {
@@ -176,7 +174,6 @@ if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
             if ($_SESSION["attempts"] > 6) {
                 $_SESSION["gameOver"] = true;
                 $_SESSION["game"]->setAttempts($_SESSION["attempts"]); //set the score for this round
-                $_SESSION["games"][] = $_SESSION["game"]; //push current game to the list of games
                 $_SESSION["correctWord"] = $game->getCorrectWord();
                 submitScore(); //submit score to database
             }
