@@ -17,17 +17,19 @@ if (!$dbconnection) {
 
 //return a table of all correct words played by users
 $query = "SELECT DISTINCT CorrectWord FROM Scores ORDER BY CorrectWord ASC";
-$correctWords = pg_query($dbconnection, $query);
+$correctWordsTable = pg_query($dbconnection, $query);
 
 $words = [];
 
-while ($row = pg_fetch_assoc($correctWords)) {
+while ($row = pg_fetch_assoc($correctWordsTable)) {
     $words[] = $row["correctword"];
 }
 
+pg_free_result($correctWordsTable);
+
 // return the users table
 $query = "SELECT * FROM Users";
-$users = pg_query($dbconnection, $query);
+$usersTable = pg_query($dbconnection, $query);
 
 ?>
 <!DOCTYPE html>
@@ -109,7 +111,7 @@ $users = pg_query($dbconnection, $query);
         </thead>
     <tbody>
         <?php
-        while ($row = pg_fetch_assoc($users)) {
+        while ($row = pg_fetch_assoc($usersTable)) {
             echo "<tr>";
             echo "<td>" . htmlspecialchars($row['emailaddress']) . "</td>";
             echo "<td>" . htmlspecialchars($row['password']) . "</td>";
@@ -118,6 +120,8 @@ $users = pg_query($dbconnection, $query);
             echo "<td><button>Modify</button><button>Remove</button></td>";
             echo "</tr>";
         }
+
+        pg_free_result($usersTable);
         ?>
     </tbody>
 </table>

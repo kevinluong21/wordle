@@ -6,3 +6,11 @@ function logout() {
 
     window.location.href = "index.php"; //redirect back to index page
 }
+
+function modifyUser() {
+
+}
+
+function removeUser() {
+
+}

@@ -55,7 +55,7 @@ if ($authentication) {
         $response["redirect"] = "/gameplay.php"; // redirect to game if player
     }
 } else {
-    $response["password-error"] = true; //this needs to be displayed somewhere else!
+    $response["password-error"] = true;
     pg_close($dbconnection);
     echo json_encode($response);
     return;

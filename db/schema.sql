@@ -17,4 +17,4 @@ CREATE TABLE Scores (
 
 INSERT INTO Users (EmailAddress, Password, Country, Role) VALUES ('admin@wordle.com', 'hello123', 'Canada', 'Admin');
 
-SELECT * FROM Scores;
+SELECT * FROM Users;
