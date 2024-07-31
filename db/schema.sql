@@ -10,10 +10,9 @@ CREATE TABLE Users (
 
 CREATE TABLE Scores (
     ScoreID SERIAL PRIMARY KEY, 
-    EmailAddress VARCHAR NOT NULL, 
+    EmailAddress VARCHAR NOT NULL REFERENCES Users(EmailAddress) ON DELETE CASCADE, 
     CorrectWord CHAR(5) NOT NULL, 
-    NumAttempts INT NOT NULL, 
-    FOREIGN KEY (EmailAddress) REFERENCES Users(EmailAddress)
+    NumAttempts INT NOT NULL
 );
 
 --create admin user

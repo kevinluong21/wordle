@@ -32,6 +32,9 @@ $query = "SELECT * FROM Users";
 $usersTable = pg_query($dbconnection, $query);
 
 ?>
+
+<!-- TODO: this page needs to have the tables updated asynchronously through the JS NOT IN THE HTML! -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,6 +50,10 @@ $usersTable = pg_query($dbconnection, $query);
         <div class="helpButtons">
             <button class="helpButton" onclick="logout()">&#x21AA; Logout</button>
         </div>
+    </div>
+
+    <div class="dialog">
+        <p class="message"></p>
     </div>
 
     <h1>Leaderboard By Correct Word</h1>
@@ -122,7 +129,7 @@ $usersTable = pg_query($dbconnection, $query);
             echo "<td>" . htmlspecialchars($row['password']) . "</td>";
             echo "<td>" . htmlspecialchars($row['country']) . "</td>";
             echo "<td>" . htmlspecialchars($row['role']) . "</td>";
-            echo "<td><button>Modify</button><button>Remove</button></td>";
+            echo "<td><button>Modify</button><button onclick=\"removeUser('" . htmlspecialchars($row['emailaddress']) . "')\">Remove</button></td>";
             echo "</tr>";
         }
 
