@@ -8,13 +8,24 @@ This project connects to an API, and if the `php.ini` configurations are not set
 
 ## Game Components
 
-### Getting Started
+### How to Setup
 To play Wordle, follow these steps:
 1. Clone the repository: git clone https://github.com/kevinluong21/wordle.git
 2. In the Wordle directory in your terminal
 3. In the terminal, enter the following command: php -S localhost:8000
 2. Open [localhost:8000](<http://localhost:8000)>) in your web browser
 3. Start guessing words and have fun!
+
+### Use from an Admin's Perspective
+
+Admin Username: admin@wordle.com
+Admin Password: hello123
+
+As an admin, click on 'Login' and enter the provided username and password above to access the admin dashboard. Then, click the 'Login' button to login. 
+
+### Use from an User's Perspective
+
+As a user, you can either 'Play as Guest' or 'Login'. If you don't have an account, click on 'Sign up' on the login page and provide your email address, password and country to create an account. 
 
 ### Gameplay
 The goal of the game is to guess the correct five-letter word within six tries. After typing in a guess of the word, press enter to submit your guess. Ensure that your guess is a valid word in order to proceed. To make corrections, use the backspace key to edit your entry. 
