@@ -98,7 +98,8 @@ $usersTable = pg_query($dbconnection, $query);
     ?>
 
 <h1>List of Users</h1>
-<button class="button">Add User</button>
+<button class="button" id="add-user-popup" onclick='show("addUserScreen")'>Add User</button>
+<button class="button" id="delete-user-popup" onclick='show("deleteUserScreen")'>Delete User</button>
 <table class="users-table">
         <thead>
             <tr>
@@ -125,6 +126,37 @@ $usersTable = pg_query($dbconnection, $query);
         ?>
     </tbody>
 </table>
+
+<!-- add user popup -->
+<div class="popup-bg" id="addUserPopup">
+    <div class="popup">
+        <div class="close-btn" onclick='hide("addUserScreen")'>&#x2715;</div>
+        <h1 class="popup-title">Add User</h1>
+        <form method="post" id="addUser">
+            <label for="email-address-add" class="subtitle">Email Address</label><br>
+            <input type="email" id="email-address-add" name="email-address" autocomplete="username" required class="text-input"><br>
+            <p class="error-message">Error message</p>
+            <label for="password-add" class="subtitle">Password</label><br>
+            <input type="password" id="password-add" name="password" required class="text-input"><br>
+            <p class="error-message">Error message</p>
+            <button type="submit" class="button">Add User</button>
+        </form>
+    </div>
+</div>
+
+<!-- delete user popup -->
+<div class="popup-bg" id="deleteUserPopup">
+    <div class="popup">
+        <div class="close-btn" onclick='hide("deleteUserScreen")'>&#x2715;</div>
+        <h1 class="popup-title">Delete User</h1>
+        <form method="post" id="deleteUser">
+            <label for="email-address-delete" class="subtitle">Email Address</label><br>
+            <input type="email" id="email-address-delete" name="email-address" autocomplete="username" required class="text-input"><br>
+            <p class="error-message">Error message</p>
+            <button type="submit" class="button">Delete User</button>
+        </form>
+    </div>
+</div>
 
 <script src="admin_display.js"></script>
 </body>
