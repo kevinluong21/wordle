@@ -5,7 +5,6 @@ session_start();
 $host = "localhost";
 $dbname = "wordle";
 
-$authentication = false;
 $response = [];
 
 // database connection
@@ -17,6 +16,7 @@ if (!$dbconnection) {
 //process login form
 
 // post username and password from form
+$nickname = $_POST['nickname'];
 $email = $_POST['email-address'];
 $password = $_POST['password'];
 $country = $_POST['country'];
@@ -46,13 +46,12 @@ if (strlen($password) < 8 || strlen($password) > 20) {
 pg_free_result($result);
 
 //insert user into database
-$query = "INSERT INTO Users (EmailAddress, Password, Country) VALUES ($1, $2, $3)";
-pg_query_params($dbconnection, $query, [$email, $password, $country]);
+$query = "INSERT INTO Users (Nickname, EmailAddress, Password, Country) VALUES ($1, $2, $3, $4)";
+pg_query_params($dbconnection, $query, [$nickname, $email, $password, $country]);
 
 $_SESSION["emailAddress"] = $email; // Save email address to session
-$_SESSION["country"] = $country; //save the user's country to session
 
-$response["redirect"] = "/gameplay.php"; // redirect to game if player
+$response["redirect"] = "/gameplay.php"; // redirect to game
 
 header("Content-Type: application/json");
 echo json_encode($response);

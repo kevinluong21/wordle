@@ -19,18 +19,18 @@ login.addEventListener("submit", function(event) {
                 //reset the error messages
                 for (let i = 0; i < errorMessages.length; i++) {
                     errorMessages[i].innerHTML = "Error message";
-                    errorMessages[i].style.visibility = "hidden";
+                    errorMessages[i].style.display = "none";
                 }
                 
                 //display error messages whether it is due to incorrect email or password
                 if (response["email-error"]) {
                     errorMessages[0].innerHTML = "Email address does not exist";
-                    errorMessages[0].style.visibility = "visible";
+                    errorMessages[0].style.display = "block";
                 }
 
                 else if (response["password-error"]) {
                     errorMessages[1].innerHTML = "Password is incorrect";
-                    errorMessages[1].style.visibility = "visible";
+                    errorMessages[1].style.display = "block";
                 }
 
                 if (response["redirect"]) {
@@ -70,18 +70,18 @@ signup.addEventListener("submit", function(event) {
                 //reset the error messages
                 for (let i = 0; i < errorMessages.length; i++) {
                     errorMessages[i].innerHTML = "Error message";
-                    errorMessages[i].style.visibility = "hidden";
+                    errorMessages[i].style.display = "none";
                 }
                 
                 //display error messages whether it is due to incorrect email or password
                 if (response["email-error"]) {
                     errorMessages[2].innerHTML = "Email address already exists";
-                    errorMessages[2].style.visibility = "visible";
+                    errorMessages[2].style.display = "block";
                 }
 
                 else if (response["password-error"]) {
                     errorMessages[3].innerHTML = "Password must be between 8 and 20 characters";
-                    errorMessages[3].style.visibility = "visible";
+                    errorMessages[3].style.display = "block";
                 }
 
                 if (response["redirect"]) {

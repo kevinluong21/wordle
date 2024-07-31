@@ -55,6 +55,8 @@ session_start();
             <div class="close-btn" onclick='hide("signupScreen")'>&#x2715;</div>
             <h1 class="popup-title">Sign Up</h1>
             <form method="post" id="signup">
+                <label for="nickname" class="subtitle">Nickname</label><br>
+                <input type="text" id="nickname" name="nickname" autocomplete="given-name" required class="text-input"><br>
                 <label for="email-address-signup" class="subtitle">Email Address</label><br>
                 <input type="email" id="email-address-signup" name="email-address" autocomplete="username" required class="text-input"><br>
                 <p class="error-message">Error message</p>

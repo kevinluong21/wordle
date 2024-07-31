@@ -21,7 +21,7 @@ $email = $_POST['email-address'];
 $password = $_POST['password'];
 
 // execute query for user/password
-$query = "SELECT * FROM Users WHERE EmailAddress = $1";
+$query = "SELECT * FROM Users WHERE EmailAddress = $1 AND EmailAddress <> 'guest@wordle.com'"; //prevent guests from logging in
 $result = pg_query_params($dbconnection, $query, array($email));
 
 $user = pg_fetch_object($result);
@@ -46,7 +46,6 @@ pg_free_result($result);
 
 if ($authentication) {
     $_SESSION["emailAddress"] = $user->emailaddress; // Save email address to session
-    $_SESSION["country"] = $user->country; //save the user's country to session
 
     if ($user->role == "Admin") {
         $response["redirect"] = "/admin_display.php"; // redirect to admin display if admin

@@ -74,14 +74,14 @@ function submitScore() {
     //submit score to database if user is logged in
     if (isset($_SESSION["emailAddress"]) && isset($_SESSION["country"])) {
         // add a new row to the scores relation
-        $query = "INSERT INTO Scores (EmailAddress, Country, CorrectWord, NumAttempts) VALUES ($1, $2, $3, $4)";
-        pg_query_params($dbconnection, $query, [$_SESSION["emailAddress"], $_SESSION["country"], $_SESSION["game"]->getCorrectWord(), $_SESSION["game"]->getAttempts()]);
+        $query = "INSERT INTO Scores (EmailAddress, CorrectWord, NumAttempts) VALUES ($1, $2, $3)";
+        pg_query_params($dbconnection, $query, [$_SESSION["emailAddress"], $_SESSION["game"]->getCorrectWord(), $_SESSION["game"]->getAttempts()]);
     }
     //submit score as a guest if not logged in
     else {
         // add a new row to the scores relation
-        $query = "INSERT INTO Scores (EmailAddress, Country, CorrectWord, NumAttempts) VALUES ($1, $2, $3, $4)";
-        pg_query_params($dbconnection, $query, ["guest@wordle.com", "N/A", $_SESSION["game"]->getCorrectWord(), $_SESSION["game"]->getAttempts()]);
+        $query = "INSERT INTO Scores (EmailAddress, CorrectWord, NumAttempts) VALUES ($1, $2, $3)";
+        pg_query_params($dbconnection, $query, ["guest@wordle.com", $_SESSION["game"]->getCorrectWord(), $_SESSION["game"]->getAttempts()]);
     }
 }
 
@@ -101,6 +101,7 @@ $response = [];
 
 if (isset($_POST["action"]) && $_POST["action"] == "logout") {
     resetGame(); //reset game before logging out
+    $_SESSION["nickname"] = null;
     $_SESSION["emailAddress"] = null; //reset the email address field
     $_SESSION["country"] = null;
 }

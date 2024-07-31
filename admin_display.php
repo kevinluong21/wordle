@@ -61,7 +61,7 @@ $usersTable = pg_query($dbconnection, $query);
     <?php 
         foreach ($words as $word) {
             // return the scores table for each correct word
-            $query = "SELECT * FROM Scores WHERE CorrectWord = $1 ORDER BY NumAttempts, ID ASC";
+            $query = "SELECT Scores.ScoreID, Users.Nickname, Scores.EmailAddress, Users.Country, Scores.CorrectWord, Scores.NumAttempts FROM Scores JOIN Users ON Scores.EmailAddress = Users.EmailAddress WHERE Scores.CorrectWord = $1 ORDER BY Scores.NumAttempts, Scores.ScoreID ASC";
             $scores = pg_query_params($dbconnection, $query, [$word]);
 
             echo "<div id='" . htmlspecialchars($word) . "' class='tab-content'>";
@@ -70,6 +70,7 @@ $usersTable = pg_query($dbconnection, $query);
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Nickname</th>
                         <th>Email Address</th>
                         <th>Country</th>
                         <th>Correct Word</th>
@@ -81,7 +82,8 @@ $usersTable = pg_query($dbconnection, $query);
             
             while ($row = pg_fetch_assoc($scores)) {
                 echo "<tr>";
-                echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['scoreid']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['nickname']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['emailaddress']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['country']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['correctword']) . "</td>";
@@ -103,6 +105,7 @@ $usersTable = pg_query($dbconnection, $query);
 <table class="users-table">
         <thead>
             <tr>
+                <th>Nickname</th>
                 <th>Email Address</th>
                 <th>Password</th>
                 <th>Country</th>
@@ -114,6 +117,7 @@ $usersTable = pg_query($dbconnection, $query);
         <?php
         while ($row = pg_fetch_assoc($usersTable)) {
             echo "<tr>";
+            echo "<td>" . htmlspecialchars($row['nickname']) . "</td>";
             echo "<td>" . htmlspecialchars($row['emailaddress']) . "</td>";
             echo "<td>" . htmlspecialchars($row['password']) . "</td>";
             echo "<td>" . htmlspecialchars($row['country']) . "</td>";

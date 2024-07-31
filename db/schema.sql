@@ -1,20 +1,27 @@
 -- create a database first and run these queries
 
 CREATE TABLE Users (
-    EmailAddress VARCHAR, 
-    Password VARCHAR NOT NULL, 
-    Country VARCHAR NOT NULL,
-    Role TEXT DEFAULT 'Player' CHECK (Role IN ('Admin', 'Player')), -- by default, unless specified is Player
-    PRIMARY KEY (EmailAddress, Country));
+    Nickname VARCHAR(20) NOT NULL, 
+    EmailAddress VARCHAR PRIMARY KEY, 
+    Password VARCHAR(20) NOT NULL, 
+    Country VARCHAR,
+    Role TEXT DEFAULT 'Player' CHECK (Role IN ('Admin', 'Player')) -- by default, unless specified is Player
+);
 
 CREATE TABLE Scores (
-    ID SERIAL PRIMARY KEY, 
+    ScoreID SERIAL PRIMARY KEY, 
     EmailAddress VARCHAR NOT NULL, 
-    Country VARCHAR NOT NULL, 
-    CorrectWord VARCHAR, 
-    NumAttempts INT, 
-    FOREIGN KEY (EmailAddress, Country) REFERENCES Users(EmailAddress, Country));
+    CorrectWord CHAR(5) NOT NULL, 
+    NumAttempts INT NOT NULL, 
+    FOREIGN KEY (EmailAddress) REFERENCES Users(EmailAddress)
+);
 
-INSERT INTO Users (EmailAddress, Password, Country, Role) VALUES ('admin@wordle.com', 'hello123', 'Canada', 'Admin');
+--create admin user
+INSERT INTO Users (Nickname, EmailAddress, Password, Country, Role) VALUES ('Admin', 'admin@wordle.com', 'hello123', 'Canada', 'Admin');
+--create default guest user (guest@wordle.com is reserved for guests)
+INSERT INTO Users (Nickname, EmailAddress, Password, Country) VALUES ('Guest', 'guest@wordle.com', 'N/A', 'N/A');
 
 SELECT * FROM Users;
+
+DROP TABLE Scores;
+DROP TABLE Users;
