@@ -7,10 +7,24 @@ function logout() {
     window.location.href = "index.php"; //redirect back to index page
 }
 
+function showTabContent(index) {
+    var tab = document.getElementsByClassName("tab");
+    var tabContent = document.getElementsByClassName("tab-content");
+
+    for (let i = 0; i < tabContent.length; i++) {
+        tabContent[i].style.display = "none";
+        tab[i].classList.remove("active");
+    }
+    
+    tab[index].classList.add("active");
+    tabContent[index].style.display = "block";
+}
+
 function updateTables() {
     var xhttp = new XMLHttpRequest();
     var usersTable = document.getElementsByClassName("users-table")[0];
     var tabs = document.getElementsByClassName("tabs")[0];
+    var heading = document.getElementsByClassName("heading")[1];
 
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -18,8 +32,6 @@ function updateTables() {
                 var response = JSON.parse(this.responseText);
                 var users = response["users"];
                 var scores = response["scores"];
-
-                console.log(scores);
                 
                 for (let i = 0; i < users.length; i++) {
                     var tr = document.createElement("tr");
@@ -36,6 +48,7 @@ function updateTables() {
                     country.innerHTML = users[i]["country"];
                     role.innerHTML = users[i]["role"];
                     deleteBtn.innerHTML = "Delete";
+                    deleteBtn.className = "button";
                     deleteBtn.setAttribute("onclick", "removeUser('" + users[i]["emailaddress"] + "')");
 
                     tr.appendChild(nickname);
@@ -48,7 +61,15 @@ function updateTables() {
                     usersTable.appendChild(tr);
                 }
 
-                for (let i = 0; i < scores.length; i++) {
+                keys = Object.keys(scores);
+
+                for (let i = 0; i < keys.length; i++) {
+                    var tab = document.createElement("button");
+                    tab.className = "tab";
+                    tab.setAttribute("onclick", "showTabContent(" + i + ")");
+                    tab.innerHTML = keys[i];
+                    tabs.appendChild(tab);
+
                     var div = document.createElement("div");
                     div.className = "tab-content";
                     var scoresTable = document.createElement("table");
@@ -66,7 +87,7 @@ function updateTables() {
                     </thead>
                     `
 
-                    for (let j = 0; j < scores[i].length; j++) {
+                    for (let j = 0; j < scores[keys[i]].length; j++) {
                         var tr = document.createElement("tr");
                         var scoreID = document.createElement("td");
                         var nickname = document.createElement("td");
@@ -75,12 +96,12 @@ function updateTables() {
                         var correctWord = document.createElement("td");
                         var numAttempts = document.createElement("td");
 
-                        scoreID.innerHTML = scores[i][j]["scoreid"];
-                        nickname.innerHTML = scores[i][j]["nickname"];
-                        emailAddress.innerHTML = scores[i][j]["emailaddress"];
-                        country.innerHTML = scores[i][j]["country"];
-                        correctWord.innerHTML = scores[i][j]["correctword"];
-                        numAttempts.innerHTML = scores[i][j]["numattempts"];
+                        scoreID.innerHTML = scores[keys[i]][j]["scoreid"];
+                        nickname.innerHTML = scores[keys[i]][j]["nickname"];
+                        emailAddress.innerHTML = scores[keys[i]][j]["emailaddress"];
+                        country.innerHTML = scores[keys[i]][j]["country"];
+                        correctWord.innerHTML = scores[keys[i]][j]["correctword"];
+                        numAttempts.innerHTML = scores[keys[i]][j]["numattempts"];
 
                         tr.appendChild(scoreID);
                         tr.appendChild(nickname);
@@ -92,8 +113,7 @@ function updateTables() {
                         scoresTable.appendChild(tr);
                         div.appendChild(scoresTable);
                     }
-
-                    tabs.appendChild(div);
+                    document.body.insertBefore(div, heading);
                 }
             }
             catch (error) {

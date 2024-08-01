@@ -23,25 +23,25 @@ session_start();
         <p class="message"></p>
     </div>
 
-    <h1>Leaderboard By Correct Word</h1>
+    <h1 class="heading">Leaderboard By Correct Word</h1>
     <div class="tabs">
     </div>
 
-<h1>List of Users</h1>
-<button class="button">Add User</button>
+    <h1 class="heading">List of Users</h1>
+    <button class="button">Add User</button>
 
-<table class="users-table">
-    <thead>
-        <tr>
-            <th>Nickname</th>
-            <th>Email Address</th>
-            <th>Password</th>
-            <th>Country</th>
-            <th>Role</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-</table>
+    <table class="users-table">
+        <thead>
+            <tr>
+                <th>Nickname</th>
+                <th>Email Address</th>
+                <th>Password</th>
+                <th>Country</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    </table>
 <script src="admin_display.js"></script>
 </body>
 </html>

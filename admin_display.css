@@ -49,6 +49,12 @@ html, body {
     text-align: center;
 }
 
+.heading {
+    font-family: Arial, Helvetica, sans-serif;
+    clear: both;
+    padding-top: 2.5%;
+}
+
 .button {
     border: none;
     padding: 10px 40px;
@@ -65,6 +71,29 @@ html, body {
 .button:hover {
     background-color: black;
     color: white;
+}
+
+.tabs button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+.tabs button:hover {
+    background-color: #ddd;
+}
+
+.tabs button.active {
+    background-color: #ccc;
+}
+
+.tab-content {
+    display: none;
+    padding: 6px 12px;
 }
 
 table {

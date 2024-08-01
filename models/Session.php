@@ -72,7 +72,7 @@ function submitScore() {
     global $dbconnection;
 
     //submit score to database if user is logged in
-    if (isset($_SESSION["emailAddress"]) && isset($_SESSION["country"])) {
+    if (isset($_SESSION["emailAddress"])) {
         // add a new row to the scores relation
         $query = "INSERT INTO Scores (EmailAddress, CorrectWord, NumAttempts) VALUES ($1, $2, $3)";
         pg_query_params($dbconnection, $query, [$_SESSION["emailAddress"], $_SESSION["game"]->getCorrectWord(), $_SESSION["game"]->getAttempts()]);

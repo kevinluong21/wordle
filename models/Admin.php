@@ -61,7 +61,7 @@ function getScores() {
         $query = "SELECT Scores.ScoreID, Users.Nickname, Scores.EmailAddress, Users.Country, Scores.CorrectWord, Scores.NumAttempts FROM Scores JOIN Users ON Scores.EmailAddress = Users.EmailAddress WHERE Scores.CorrectWord = $1 ORDER BY Scores.NumAttempts, Scores.ScoreID ASC";
         $scoresTable = pg_query_params($dbconnection, $query, [$word]);
 
-        $scores[] = pg_fetch_all($scoresTable);
+        $scores[$word] = pg_fetch_all($scoresTable);
 
         pg_free_result($scoresTable);
     }
