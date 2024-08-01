@@ -86,6 +86,13 @@ function updateTables() {
     var usersTable = document.getElementsByClassName("users-table")[0];
     var usersTableBody = document.getElementsByClassName("users")[0];
     var tabs = document.getElementsByClassName("tabs")[0];
+    var tab = document.getElementsByClassName("tab");
+    var tabContent = document.getElementsByClassName("tab-content");
+    var tabContents = [];
+
+    while (tabs.hasChildNodes()) {
+        tabs.removeChild(tabs.firstChild);
+    }
 
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -97,15 +104,15 @@ function updateTables() {
                 keys = Object.keys(scores);
 
                 for (let i = 0; i < keys.length; i++) {
-                    var tab = document.createElement("button");
+                    let tab = document.createElement("button");
                     tab.className = "tab";
                     tab.setAttribute("onclick", "showTabContent(" + i + ")");
                     tab.innerHTML = keys[i];
-                    tabs.replaceChild(tab, document.getElementsByClassName("tab")[0]);
+                    tabs.appendChild(tab);
 
-                    var div = document.createElement("div");
+                    let div = document.createElement("div");
                     div.className = "tab-content";
-                    var scoresTable = document.createElement("table");
+                    let scoresTable = document.createElement("table");
                     scoresTable.className = "scores-table";
                     scoresTable.innerHTML = `
                     <thead>
@@ -121,13 +128,13 @@ function updateTables() {
                     `
 
                     for (let j = 0; j < scores[keys[i]].length; j++) {
-                        var tr = document.createElement("tr");
-                        var scoreID = document.createElement("td");
-                        var nickname = document.createElement("td");
-                        var emailAddress = document.createElement("td");
-                        var country = document.createElement("td");
-                        var correctWord = document.createElement("td");
-                        var numAttempts = document.createElement("td");
+                        let tr = document.createElement("tr");
+                        let scoreID = document.createElement("td");
+                        let nickname = document.createElement("td");
+                        let emailAddress = document.createElement("td");
+                        let country = document.createElement("td");
+                        let correctWord = document.createElement("td");
+                        let numAttempts = document.createElement("td");
 
                         scoreID.innerHTML = scores[keys[i]][j]["scoreid"];
                         nickname.innerHTML = scores[keys[i]][j]["nickname"];
@@ -146,11 +153,14 @@ function updateTables() {
                         scoresTable.appendChild(tr);
                         div.appendChild(scoresTable);
                     }
-                    tabs.replaceChild(div, document.getElementsByClassName("tab-content")[0]);
+                    tabContents.push(div);
                 }
 
-                var tab = document.getElementsByClassName("tab");
-                var tabContent = document.getElementsByClassName("tab-content");
+                console.log(tabContents[0]);
+
+                for (let i = 0; i < tabContents.length; i++) {
+                    tabs.appendChild(tabContents[i]);
+                }
 
                 if (tab.length > 0) {
                     tab[0].classList.add("active");
@@ -161,13 +171,13 @@ function updateTables() {
                 tbody.className = "users";
                 
                 for (let i = 0; i < users.length; i++) {
-                    var tr = document.createElement("tr");
-                    var nickname = document.createElement("td");
-                    var emailAddress = document.createElement("td");
-                    var password = document.createElement("td");
-                    var country = document.createElement("td");
-                    var role = document.createElement("td");
-                    var deleteBtn = document.createElement("button");
+                    let tr = document.createElement("tr");
+                    let nickname = document.createElement("td");
+                    let emailAddress = document.createElement("td");
+                    let password = document.createElement("td");
+                    let country = document.createElement("td");
+                    let role = document.createElement("td");
+                    let deleteBtn = document.createElement("button");
 
                     nickname.innerHTML = users[i]["nickname"];
                     emailAddress.innerHTML = users[i]["emailaddress"];
@@ -188,7 +198,6 @@ function updateTables() {
 
                     tbody.appendChild(tr);
                 }
-
                 usersTable.replaceChild(tbody, usersTableBody);
             }
             catch (error) {

@@ -27,7 +27,6 @@ session_start();
 
     <h1 class="heading">Leaderboard By Correct Word</h1>
     <div class="tabs">
-        <button class="tab"></button>
         <div class="tab-content"></div>
     </div>
 
