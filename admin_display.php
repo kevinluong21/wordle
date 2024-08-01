@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+//prevent users who are not admin to access this page
+if (!isset($_SESSION["emailAddress"]) || $_SESSION["emailAddress"] != "admin@wordle.com") {
+    header("Location: index.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
