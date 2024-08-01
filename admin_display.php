@@ -31,31 +31,35 @@ if (!isset($_SESSION["emailAddress"]) || $_SESSION["emailAddress"] != "admin@wor
         <p class="message"></p>
     </div>
 
-    <h1 class="heading">Leaderboard By Correct Word</h1>
-    <div class="tabs">
-        <div class="tab-content"></div>
+    <div class="section">
+        <h1 class="heading">Leaderboard By Correct Word</h1>
+        <div class="tabs">
+            <div class="tab-content"></div>
+        </div>
     </div>
 
-    <h1 class="heading">List of Users</h1>
-    <button class="button" onclick="addUser()">Add</button>
+    <div class="section">
+        <h1 class="heading">List of Users</h1>
+        <button class="button" onclick="addUser()">Add</button>
+        <form method="post" id="add-user">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Nickname</th>
+                        <th>Email Address</th>
+                        <th>Password</th>
+                        <th>Country</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="users">
+                </tbody>
+            </table>
+        </form>
+    </div>
 
-    <form method="post" id="add-user">
-        <table class="users-table">
-            <thead>
-                <tr>
-                    <th>Nickname</th>
-                    <th>Email Address</th>
-                    <th>Password</th>
-                    <th>Country</th>
-                    <th>Role</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody class="users">
-            </tbody>
-        </table>
-    </form>
-
+    <div class="footer">© 2024 JK (JESSICA + KEVIN).</div>
     <script src="admin_display.js"></script>
 </body>
 

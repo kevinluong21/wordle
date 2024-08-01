@@ -1,4 +1,4 @@
-var addUserPress = 0; //keeps track of how many times a user clicks the button (prevents user from adding more than 1 user at a time)
+var toggleAddUser = false; //tracks whether a new user is being added
 var form = document.getElementById("add-user");
 
 //form to add a new user
@@ -14,7 +14,6 @@ form.addEventListener("submit", function(event) {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             try {
-                console.log(this.responseText);
                 var response = JSON.parse(this.responseText);
                 
                 //display error messages whether it is due to incorrect email or password
@@ -156,8 +155,6 @@ function updateTables() {
                     tabContents.push(div);
                 }
 
-                console.log(tabContents[0]);
-
                 for (let i = 0; i < tabContents.length; i++) {
                     tabs.appendChild(tabContents[i]);
                 }
@@ -211,10 +208,15 @@ function updateTables() {
 }
 
 function addUser() {
-    if (++addUserPress > 1) {
-        addUserPress = 1;
+    var usersTableBody = document.getElementsByClassName("users")[0];
+    
+    if (toggleAddUser) {
+        toggleAddUser = false;
+        usersTableBody.removeChild(usersTableBody.lastChild);
         return;
     }
+
+    toggleAddUser = true;
 
     var usersTableBody = document.getElementsByClassName("users")[0];
 

@@ -78,6 +78,11 @@ html, body {
     color: white;
 }
 
+.section {
+    width: 90%;
+    margin: auto;
+}
+
 .tabs button {
     background-color: inherit;
     float: left;
@@ -103,8 +108,7 @@ html, body {
 }
 
 table {
-    width: 90%;
-    margin: auto;
+    width: 100%;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -119,6 +123,14 @@ table th {
 
 .select-input {
     font-size: 16px;
+}
+
+.footer {
+    padding-top: 5%;
+    padding-bottom: 5%;
+    width: 100%;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .fade {
