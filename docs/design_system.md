@@ -21,6 +21,10 @@ The button to access the scoreboard in the game is indicated by a button with th
 ![Scoreboard For New Player](/docs/assets/design_system/statistics_lightbox_for_new_player.png)
 ![Game Leaderboard showing your top 10 scores](assets/design_system/leaderboard.png)
 
+### Logout
+The button to logout from the Wordle game is indicated by a button with a Logout icon and located on the right-end of the header. It is prominantely displayed and easily visable for users. In the screenshot below, the logout button is circled in red.
+![Logout](assets/design_system/logout.png)
+
 ### Footers
 The footer of the game is positioned at the bottom of the screen and simply indicates copyright information. The information is centred and kept minimal to avoid detracting from the overall game experience, but is easy to read. Please refer to [Footer Mockup](/docs/assets/design_system/footer.html) for the footer mockup.  
 ![Footer](/docs/assets/design_system/footer.png)

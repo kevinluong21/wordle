@@ -14,18 +14,21 @@ To play Wordle, follow these steps:
 2. In the Wordle directory in your terminal
 3. In the terminal, enter the following command: php -S localhost:8000
 2. Open [localhost:8000](<http://localhost:8000)>) in your web browser
-3. Start guessing words and have fun!
+3. Choose to Play As Guest or Login as User or Admin. 
+4. Start guessing words and have fun!
 
 ### Use from an Admin's Perspective
 
-Admin Username: admin@wordle.com
+Admin Email Address: admin@wordle.com
 Admin Password: hello123
 
-As an admin, click on 'Login' and enter the provided username and password above to access the admin dashboard. Then, click the 'Login' button to login. 
+As an admin, click on 'Login' and enter the provided email address and password above to access the admin dashboard. After clicking the 'Login' button, you will be redirected to the admin display page. This page allows admins to mannage leaderboard data and user information. This features a sectio to view the leaderboard of correct words and a section to manage the complete list of the users, including adding new users. 
 
 ### Use from an User's Perspective
 
-As a user, you can either 'Play as Guest' or 'Login'. If you don't have an account, click on 'Sign up' on the login page and provide your email address, password and country to create an account. 
+Guest Email Address: guest@wordle.com
+
+As a user, you can either 'Play as Guest' or 'Login'. If you don't have an account, click on 'Sign up' on the login page and provide your nickname, email address, password and country to create an account. Once you are logged in, you will be redirected to Wordle game. Continue reading the documentation to understand the instructions for the game. 
 
 ### Gameplay
 The goal of the game is to guess the correct five-letter word within six tries. After typing in a guess of the word, press enter to submit your guess. Ensure that your guess is a valid word in order to proceed. To make corrections, use the backspace key to edit your entry. 
@@ -42,3 +45,6 @@ For information relating to your scores and progress, click on the Scoreboard ic
 
 ### Play Again
 You win when you guess the correct hidden word. Whether you guess the correct word or not, click on the Scoreboard icon located on the top right and click on the green 'Play Again' button to restart the game and replay it. 
+
+### Logout
+Click on the Logout icon located on the top right to logout. 
