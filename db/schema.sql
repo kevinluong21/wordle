@@ -19,9 +19,3 @@ CREATE TABLE Scores (
 INSERT INTO Users (Nickname, EmailAddress, Password, Country, Role) VALUES ('Admin', 'admin@wordle.com', 'hello123', 'Canada', 'Admin');
 --create default guest user (guest@wordle.com is reserved for guests)
 INSERT INTO Users (Nickname, EmailAddress, Password, Country) VALUES ('Guest', 'guest@wordle.com', 'N/A', 'N/A');
-
-SELECT * FROM Users;
-SELECT * FROM Scores;
-
-DROP TABLE Scores;
-DROP TABLE Users;

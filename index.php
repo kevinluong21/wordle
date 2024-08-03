@@ -2,12 +2,6 @@
 session_start();
 ?>
 
-<!-- TODO: the admin should be able to add or delete users or scores -->
-<!-- TODO: add an extra tab to the leaderboard that allows users to see their scores compared with all other users in their country
-  or globally -->
-<!-- TODO: add ability for user to sign up for an account where their email address does not yet exist (also allow users to
- reset their password) -->
-
 <!DOCTYPE html>
 <html lang="en">
 

@@ -1,42 +1,58 @@
 # Design Document
 
 ## Front-End Components
-### Headers
+### Admin
+#### Scores Table
+The Admin is able to view all of the scores of every round that was played, organized by the correct word. Each score is given an ID; the player's nickname, email address, and country; the correct word, and the number of attempts (7 being a loss). By clicking on the tabs, the Admin is able to see the scores sorted by the number of attempts (least to greatest). That way, we can compare scores for the same word.
+![Admin Page](/docs/assets/design_system/admin_page.png)
+![Admin Page - Scores Table](/docs/assets/design_system/admin_page_scores_table.png)
+
+#### Users Table
+The Admin has the ability to add or delete users. The "Add" button will open a new row with text and select inputs, similar to a form. The Admin only has to input all of the information as if they were a player sigining up, and click "Save" or hit the Enter key to submit the player's information. If the information is valid, the table will update and the player will be added to the database. If not, an error dialog message will appear, indicating the error.
+![Admin Page](/docs/assets/design_system/admin_page.png)
+![Admin Page - Adding User](/docs/assets/design_system/admin_page_adding_user.png)
+![Admin Page - Added User](/docs/assets/design_system/admin_page_added_user.png)
+
+Each user can also be deleted. For every user, the admin has the ability to manually delete the account for whatever reason. Once a deletion is complete, the table will update to display only the remaining users.
+![Admin Page - Delete User](/docs/assets/design_system/admin_page_remove_user.png)
+
+### Gameplay
+#### Headers
 The header of the game is positioned at the top of the screen and serves as an easily accessible menu for users. The game title is centered within the header, ensuring that it is easily identifiable without overshadowing the gameboard and playing experience. Within the header, users can also find two intuitively recognizable buttons with symbols that represent a button to access the help and instructions, and another to access the scoreboard. Please refer to [Header Mockup](/docs/assets/design_system/header.html) for the header mockup.  
 ![Header](/docs/assets/design_system/header.png)
 
-### Gameboard
+#### Gameboard
 The gameboard in Wordle is a grid where users can input multiple guesses for a hidden word, each guess leading them closer to the hidden word. The 6x5 grid consists of 30 sleek and minimalist tiles, each allowing a user to type a letter. As hints to help the user guess the hidden word, the tiles change to either yellow, green, or grey based on whether their guessed letter is correct or not. Refer to [README.md](/README.md) for more details. The overall minimalist design of the game allows the user to focus on the guesses of the words themselves. Please refer to [Gameboard Mockup](/docs/assets/design_system/gameboard.html) for the gameboard mockup.  
 ![New Gameboard](/docs/assets/design_system/game_area.png)
 ![Guess With Incorrect Letters](/docs/assets/design_system/incorrect_letters.png)
 ![Correct Guess](/docs/assets/design_system/correct_word.png)
 ![Guess With Correct Letters In Wrong Position](/docs/assets/design_system/correct_letters_wrong_position.png)
 
-### Instructions
+#### Instructions
 The instructions for the Wordle game are designed to be accessible and informative, providing guidance to the user without disrupting the gameplay itself. It is accessible through the button in the headers featuring a question mark, ensuring users can easily find and access the instructions. The instructions themselves are concise and presented to be easily digestible for a new user. It is also easily accessible during any step of the game, which allows players to refer to the instructions as much as they may need. Please refer to [Instructions Mockup](/docs/assets/design_system/instructions.html) for the instructions lightbox mockup.  
 ![Instructions Lightbox](/docs/assets/design_system/instructions_lightbox.png)
 
-### Scoreboard
+#### Scoreboard
 The button to access the scoreboard in the game is indicated by a button with the bar graph symbol and located on the right-end of the header, positioned carefully to avoid disrupting a user's gameplay experience. The scoreboard provides players with real-time tracking of their progress, displaying key information such as a short message, their number of wins, and their respective winning word guesses. In addition, the scoreboard includes a button 'Play Again' to allow users to restart the game and play another run. The scoreboard will continue to track the scores of all games while the user is connected to the game. By integrating a scoreboard and an option to replay the game within the game, users can become more invested in the gameplay and their progress. Please refer to [Scoreboard Mockup](/docs/assets/design_system/scoreboard.html) for the scoreboard mockup.  
 ![Scoreboard For New Player](/docs/assets/design_system/statistics_lightbox_for_new_player.png)
 ![Game Leaderboard showing your top 10 scores](assets/design_system/leaderboard.png)
 
-### Logout
+#### Logout
 The button to logout from the Wordle game is indicated by a button with a Logout icon and located on the right-end of the header. It is prominantely displayed and easily visable for users. In the screenshot below, the logout button is circled in red.
 ![Logout](assets/design_system/logout.png)
 
-### Footers
+#### Footers
 The footer of the game is positioned at the bottom of the screen and simply indicates copyright information. The information is centred and kept minimal to avoid detracting from the overall game experience, but is easy to read. Please refer to [Footer Mockup](/docs/assets/design_system/footer.html) for the footer mockup.  
 ![Footer](/docs/assets/design_system/footer.png)
 
-### Fonts and Sizes
+#### Fonts and Sizes
 The primary font for the game is Arial, a timeless sans-serif font designed for readability and accessibility. It is a standard font and widely used amongst websites - modern looking and easy to read under any background. It is also a web-safe font that is typically pre-installed and readily available on the majority of operating systems, eliminating the need for installation and ensuring quick load times.
 
 If Arial is not available, the font switches to the secondary font, Helvetica, which inspired Arial's design. It is just as readable as Arial, with an added touch of elegance and sharper lines. Finally, in the rare instances that both Arial and Helvetica are not available, the website will automatically default to any sans-serif font that the computer has installed, making sure to provide an accessible and readable alternative. 
 
 Font sizes are chosen to ensure clarity and structure. Headers, including the title, use a 16px font to ensure prominence and catch a reader's attention. The letters within the tiles are the same size as the headers, but appear bigger because of the gameboard's design. This assures that the title does not distract the user. This font size ensures overall readability and comfort for the user experience.
 
-### Colours
+#### Colours
 The colour palette is carefully curated to provide the user with an enhanced user experience, using high-contrasting colours to emphasize readability and accessibility. All the text in the game is black (#000000), and the main game area features a white background (#FFFFFF). Wordle also uses yellow, green, and grey in their respective tiles to indicate the status of each letter in each guess, based on whether or not the letter is a letter in the word and if it's in the correct position or not. These colours provide immediate visual feedback of the guesses, making the game system easy to understand without needing to read instructions. Refer to [README.md](/README.md) for more details on how the colours correlate to the guesses. Overall, these colour aspects provide a modern, sleek, and visually appealing interface that is both user-friendly and eye-catching.
 
 ## Back-End Components
