@@ -130,6 +130,23 @@ Once a user submits a guess, the guess is sent to the PHP server along with the 
 * incorrectLetters is an array of indices that indicate which letters are not in correctWord at all. These letters are indicated by a gray tile in the front-end.  
 
 ```php
+function submitScore() {
+    global $dbconnection;
+
+    //submit score to database if user is logged in
+    if (isset($_SESSION["emailAddress"])) {
+        // add a new row to the scores relation
+        $query = "INSERT INTO Scores (EmailAddress, CorrectWord, NumAttempts) VALUES ($1, $2, $3)";
+        pg_query_params($dbconnection, $query, [$_SESSION["emailAddress"], $_SESSION["game"]->getCorrectWord(), $_SESSION["game"]->getAttempts()]);
+    }
+    //submit score as a guest if not logged in
+    else {
+        // add a new row to the scores relation
+        $query = "INSERT INTO Scores (EmailAddress, CorrectWord, NumAttempts) VALUES ($1, $2, $3)";
+        pg_query_params($dbconnection, $query, ["guest@wordle.com", $_SESSION["game"]->getCorrectWord(), $_SESSION["game"]->getAttempts()]);
+    }
+}
+
 if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
     $guess = join("", $_SESSION["guess"]);
     $game = $_SESSION["game"];
@@ -147,7 +164,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
         if ($result === true) {
             $_SESSION["gameOver"] = true;
             $_SESSION["game"]->setAttempts($_SESSION["attempts"] - 1); //set the score for this round
-            $_SESSION["games"][] = $_SESSION["game"]; //push current game to the list of games
+            submitScore(); //submit score to database
         }
         else {
             $correctPositions = $result[0];
@@ -157,8 +174,8 @@ if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
             if ($_SESSION["attempts"] > 6) {
                 $_SESSION["gameOver"] = true;
                 $_SESSION["game"]->setAttempts($_SESSION["attempts"]); //set the score for this round
-                $_SESSION["games"][] = $_SESSION["game"]; //push current game to the list of games
                 $_SESSION["correctWord"] = $game->getCorrectWord();
+                submitScore(); //submit score to database
             }
 
             $_SESSION["letter"] = 0; //reset for the next guess
@@ -308,10 +325,74 @@ private function checkLetters($inputArray, $correctArray, $correctPositions) {
 ```
 
 ### Calculating Results
-Once the user presses the Enter key, the guess is submitted to the submitGuess block in [Session.php](/models/Session.php) to return the results in the response. If the result is True, then the guess is a perfect match. The game then ends. Otherwise, the script will colour the backgrounds of the tiles using DOM to be green if the letter in the guess is in the correct position, yellow if the letter is in the word but in the wrong position, and gray if the letter is incorrect. Once the round ends, the current Game object is appended to an array, games, which is used to track the user's past games.  
+Once the user presses the Enter key, the guess is submitted to the submitGuess block in [Session.php](/models/Session.php) to return the results in the response. If the result is True, then the guess is a perfect match. The game then ends. Otherwise, the script will colour the backgrounds of the tiles using DOM to be green if the letter in the guess is in the correct position, yellow if the letter is in the word but in the wrong position, and gray if the letter is incorrect. Once the round ends, the number of attempts and the correct word is submitted to the database under the current user's email address (or under the Guest email address if the user decides not to login).
+
+```php
+function submitScore() {
+    global $dbconnection;
+
+    //submit score to database if user is logged in
+    if (isset($_SESSION["emailAddress"])) {
+        // add a new row to the scores relation
+        $query = "INSERT INTO Scores (EmailAddress, CorrectWord, NumAttempts) VALUES ($1, $2, $3)";
+        pg_query_params($dbconnection, $query, [$_SESSION["emailAddress"], $_SESSION["game"]->getCorrectWord(), $_SESSION["game"]->getAttempts()]);
+    }
+    //submit score as a guest if not logged in
+    else {
+        // add a new row to the scores relation
+        $query = "INSERT INTO Scores (EmailAddress, CorrectWord, NumAttempts) VALUES ($1, $2, $3)";
+        pg_query_params($dbconnection, $query, ["guest@wordle.com", $_SESSION["game"]->getCorrectWord(), $_SESSION["game"]->getAttempts()]);
+    }
+}
+
+if (isset($_POST["action"]) && $_POST["action"] == "submitGuess") {
+    $guess = join("", $_SESSION["guess"]);
+    $game = $_SESSION["game"];
+
+    if (strlen($guess) != 5) {
+        $_SESSION["result"] = "Guess must be 5 characters.";
+    }
+    else if (!isWord($guess)) {
+        $_SESSION["result"] = "Not a word";
+    }
+    else {
+        $result = $game->checkWord($guess);
+        $_SESSION["attempts"]++;
+        
+        if ($result === true) {
+            $_SESSION["gameOver"] = true;
+            $_SESSION["game"]->setAttempts($_SESSION["attempts"] - 1); //set the score for this round
+            submitScore(); //submit score to database
+        }
+        else {
+            $correctPositions = $result[0];
+            $correctLetters = $result[1];
+            $incorrectLetters = $result[2];
+
+            if ($_SESSION["attempts"] > 6) {
+                $_SESSION["gameOver"] = true;
+                $_SESSION["game"]->setAttempts($_SESSION["attempts"]); //set the score for this round
+                $_SESSION["correctWord"] = $game->getCorrectWord();
+                submitScore(); //submit score to database
+            }
+
+            $_SESSION["letter"] = 0; //reset for the next guess
+            $_SESSION["guess"] = []; //reset for the next guess
+        }
+
+        $_SESSION["result"] = $result;
+    }
+
+    $response["games"] = displayGames();
+    $response["attempts"] = $_SESSION["attempts"];
+    $response["gameOver"] = $_SESSION["gameOver"];
+    $response["correctWord"] = $_SESSION["correctWord"];
+    $response["result"] = $_SESSION["result"];
+}
+```
 
 ### Tracking The Scores
-Since each round is a separate Game object, the script is able to store the number of attempts and the correct word in the array, games. It then uses the displayAllGames() function to build a table that reads the number of attempts that were made in each round and the correct word and displays it as statistics to the user. The user can view their statistics either by clicking on bar graph symbol in the header or it is automatically displayed to the user at the end of each game. The [Session.php](/models/Session.php) file will automatically return a response that slices the top 10 of the user's scores from the database.
+Since each round is a separate Game object, the script is able to store the number of attempts and the correct word in the database under the user's email address. It then uses the displayAllGames() function to build a table that reads the number of attempts that were made in each round and the correct word and displays it as statistics to the user. The user can view their statistics either by clicking on bar graph symbol in the header or it is automatically displayed to the user at the end of each game. The [Session.php](/models/Session.php) file will automatically return a response that slices the top 10 of the user's scores from the database.
 
 [Session.php](/models/Session.php):
 ```php
