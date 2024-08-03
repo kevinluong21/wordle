@@ -18,7 +18,7 @@ Each user can also be deleted. For every user, the admin has the ability to manu
 
 ### Gameplay
 #### Headers
-The header of the game is positioned at the top of the screen and serves as an easily accessible menu for users. The game title is centered within the header, ensuring that it is easily identifiable without overshadowing the gameboard and playing experience. Within the header, users can also find two intuitively recognizable buttons with symbols that represent a button to access the help and instructions, and another to access the scoreboard. Please refer to [Header Mockup](/docs/assets/design_system/header.html) for the header mockup.  
+The header of the game is positioned at the top of the screen and serves as an easily accessible menu for users. The game title is centered within the header, ensuring that it is easily identifiable without overshadowing the gameboard and playing experience. Within the header, users can also find two intuitively recognizable buttons with symbols that represent a button to access the help and instructions, a button to access the scoreboard, and another button to logout. Please refer to [Header Mockup](/docs/assets/design_system/header.html) for the header mockup.  
 ![Header](/docs/assets/design_system/header.png)
 
 #### Gameboard
@@ -56,7 +56,7 @@ Font sizes are chosen to ensure clarity and structure. Headers, including the ti
 The colour palette is carefully curated to provide the user with an enhanced user experience, using high-contrasting colours to emphasize readability and accessibility. All the text in the game is black (#000000), and the main game area features a white background (#FFFFFF). Wordle also uses yellow, green, and grey in their respective tiles to indicate the status of each letter in each guess, based on whether or not the letter is a letter in the word and if it's in the correct position or not. These colours provide immediate visual feedback of the guesses, making the game system easy to understand without needing to read instructions. Refer to [README.md](/README.md) for more details on how the colours correlate to the guesses. Overall, these colour aspects provide a modern, sleek, and visually appealing interface that is both user-friendly and eye-catching.
 
 ## Back-End Components
-All of these components can be found in the [script.js](/script.js) file.
+All of these components can be found in the [gameplay.js](/gameplay.js) file.
 
 ### The buildGame() Function
 At the beginning of each game, the gameboard needs to be cleared, especially if the user had just played a round. To make the process easier, the buildGame() function is used to re-generate all of the front-end components of the gameboard, so that everything is reset to its original state quickly and in a simple manner.  
@@ -111,7 +111,7 @@ Each round of the game runs on a Game object. The object is responsible for stor
 **NOTE:** Checking the validity of a word is done in the [Session.php](/models/Session.php) file through the use of the Datamuse API.
 
 #### Starting A New Game
-The Game object is responsible for keeping track of every round and game. If the user stars the game for the first time, a new session is opened and a Game object is created. Once a user hits "Play Again", a new Game object is created and the correctWord is initialized. correctWord is randomly assigned based on what 5-letter words are in the wordInventory instance variable of the object. This is done in the PHP header of [index.php](/index.php).
+The Game object is responsible for keeping track of every round and game. If the user stars the game for the first time, a new session is opened and a Game object is created. Once a user hits "Play Again", a new Game object is created and the correctWord is initialized. correctWord is randomly assigned based on what 5-letter words are in the wordInventory instance variable of the object. This is done in the PHP header of [gameplay.php](/gameplay.php).
 
 ```php
 require "models/Game.php";
@@ -311,23 +311,33 @@ private function checkLetters($inputArray, $correctArray, $correctPositions) {
 Once the user presses the Enter key, the guess is submitted to the submitGuess block in [Session.php](/models/Session.php) to return the results in the response. If the result is True, then the guess is a perfect match. The game then ends. Otherwise, the script will colour the backgrounds of the tiles using DOM to be green if the letter in the guess is in the correct position, yellow if the letter is in the word but in the wrong position, and gray if the letter is incorrect. Once the round ends, the current Game object is appended to an array, games, which is used to track the user's past games.  
 
 ### Tracking The Scores
-Since each round is a separate Game object, the script is able to store the number of attempts and the correct word in the array, games. It then uses the displayAllGames() function to build a table that reads the number of attempts that were made in each round and the correct word and displays it as statistics to the user. The user can view their statistics either by clicking on bar graph symbol in the header or it is automatically displayed to the user at the end of each game.  
+Since each round is a separate Game object, the script is able to store the number of attempts and the correct word in the array, games. It then uses the displayAllGames() function to build a table that reads the number of attempts that were made in each round and the correct word and displays it as statistics to the user. The user can view their statistics either by clicking on bar graph symbol in the header or it is automatically displayed to the user at the end of each game. The [Session.php](/models/Session.php) file will automatically return a response that slices the top 10 of the user's scores from the database.
+
+[Session.php](/models/Session.php):
 ```php
+function displayGames() {
+    global $dbconnection;
+    $toReturn = [];
+
+    $query = "SELECT NumAttempts, CorrectWord FROM Scores WHERE EmailAddress = $1 ORDER BY NumAttempts, CorrectWord ASC LIMIT 10";
+    $games = pg_query_params($dbconnection, $query, [$_SESSION["emailAddress"]]);
+
+    while ($game = pg_fetch_assoc($games)) {
+        $toReturn[] = [htmlspecialchars($game["numattempts"]), htmlspecialchars($game["correctword"])];
+    }
+
+    return $toReturn;
+}
+```
+
+[gameplay.js](/gameplay.js):
+```javascript
 function displayAllGames(games) {
     var popup = document.getElementsByClassName("popup")[0];
     var gamesTable = document.createElement("table");
     gamesTable.classList.add("games-table");
-    var gamesLen = 10;
 
-    games.sort(function(a, b){return a[0] - b[0]}); //sort by score (lowest score is first)
-
-    if (games.length < 10) { //only display the top 10 scores
-        gamesLen = games.length;
-    }
-
-    games = games.slice(0, gamesLen); //take the top 10 scores (if less than 10, take all of them)
-
-    for (let i = 0; i < gamesLen; i++) {
+    for (let i = 0; i < games.length; i++) {
         var row = document.createElement("tr");
 
         var rowNum = document.createElement("td");
